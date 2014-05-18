@@ -14,18 +14,33 @@
 
     <meta charset='utf-8' />
     <meta name='author' content='Kohei Takahashi' />
+    <meta name='viewport' content='width=1100,height=750' />
+    <meta name='apple-mobile-web-app-capable' content='yes' />
 
-    <script src='http://html5slides.googlecode.com/svn/trunk/slides.js'></script>
+    <script src='slides.js'></script>
+    <script src='prettify.js'></script>
+    <script>
+      window.onload = prettyPrint;
+    </script>
+
+    <link rel='stylesheet' type='text/css' href='styles.css' />
+    <link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|Droid+Sans+Mono' />
   </head>
 
   <style>
-    .red { color: red };
-    .blue { color: blue };
+    table.centered { margin: 0px auto }
+    table.narrow { width: 75% }
+    table.smaller { font-size: 22px }
+
+    pre.smaller {
+      font-size: 20px;
+      line-height: 24px;
+    }
   </style>
 
   <body style='display: none'>
 
-    <section class='slides layout-widescreen'>
+    <section class="slides layout-widescreen template-boost">
 
       <article>
         <h1>
@@ -47,8 +62,8 @@
         <ul>
           <li>Twitter: <a href="https://twitter.com/Flast_RO">@Flast_RO</a> / <a href="https://wtiter.com/Flast_NET">@Flast_NET</a></li>
           <li><a href="http://ftp.tsukuba.wide.ad.jp/">http://ftp.tsukuba.wide.ad.jp/</a></li>
-          <li><a href="http://www.ihanet.info/">IHANet</a> AS64623 <span class='build'><span style='color: red'>← 経路募集中</span></span></li>
-          <li>Cryoliteの敵<span class='build'><img class='centered' src='http://gyazo.flast.jp/e25fa07d4509f71e2af77e8a4c26d8f0.png' /></span>
+          <li><a href="http://www.ihanet.info/">IHANet</a> AS64623 <span class="build"><span style='color: red'>← 経路募集中</span></span></li>
+          <li>Cryoliteの敵<span class="build"><img class="centered" src='http://gyazo.flast.jp/e25fa07d4509f71e2af77e8a4c26d8f0.png' /></span>
           </li>
         </ul>
       </article>
@@ -63,16 +78,19 @@
 
       <article>
         <h3>東芝 ER-MD500</h3>
-        <img class='centered' src='http://www.toshiba.co.jp/tha/img/about/press/20140513_er-md500.jpg' />
-        <ul class='build'>
+        <img class="centered" src='http://www.toshiba.co.jp/tha/img/about/press/20140513_er-md500.jpg' />
+        <ul class="build">
           <li>350℃まで加熱、5分で200℃まで</li>
           <li>ワンタッチで選べる調理法
-          <ul class='build'>
-            <li>表面を焼く高火力オーブンと、内部まで加熱する過熱水蒸気を組み合わせた「<span class='blue'>ハイブリッド調理</span>」</li>
-            <li>油で揚げない揚げ物(ノンオイルフライ)が可能な「<span class='blue'>ノンフライ調理</span>」</li>
+          <ul class="build">
+            <li>表面を焼く高火力オーブンと、内部まで加熱する過熱水蒸気を組み合わせた「<span class="blue">ハイブリッド調理</span>」</li>
+            <li>油で揚げない揚げ物(ノンオイルフライ)が可能な「<span class="blue">ノンフライ調理</span>」</li>
           </ul>
           <li>発売時期: 6月上旬〜7月中旬</li>
         </ul>
+        <div class="source">
+          出典: <a href='http://www.toshiba.co.jp/tha/about/press/140513.htm'>http://www.toshiba.co.jp/tha/about/press/140513.htm</a>
+        </div>
       </article>
 
       <article>
@@ -82,10 +100,76 @@
       <article>
         <h3>Boost.Range 2.0 w/ OvenToBoost</h3>
         <ul>
-          <li>Original Author: Shunsuke Sogame</li>
-          <li>Author: Akira Takahashi</li>
-          <li>Commiter: Kohsuke Yuasa, Norihisa Fujita</li>
-          <li>Translator: Kazunori Tsumura</li>
+          <li>Contributers
+          <table class="centered narrow smaller" style='border: none'>
+            <tr><th>Original Author</th><td>Shunsuke Sogame</td></tr>
+            <tr><th>Author</th><td>Akira Takahashi</td></tr>
+            <tr><th>Commiter</th><td>Kohsuke Yuasa, Norihisa Fujita</td></tr>
+            <tr><th>Translator</th><td>Kazunori Tsumura</td></tr>
+          </table>
+          </li>
+          <li>(専ら)Boost.Range 2.0にP-Stade.OvenのAdaptorを追加する拡張
+          <ul class="build">
+            <li>P-Stade.Ovenのすべてのアダプタが追加されるわけでは<span class="red">ない</span></li>
+            <li>個人的に欲しかった<span class="blue">copied_to</span>は入らない</li>
+            <li>多分みんなが一番欲しいのは<span class="blue">Regular</span></li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>How to use</h3>
+        <pre class="smaller">
+<span class="green">                 ~</span> $ git clone --recursive <a href="https://github.com/boostorg/boost.git">https://github.com/boostorg/boost.git</a> -b <span class="red">develop</span>
+<span class="green">                 ~</span> $ cd boost/libs/range
+<span class="green">~/boost/libs/range</span> $ git remote add oventoboost <a href="https://github.com/Flast/range.git">https://github.com/Flast/range.git</a>
+<span class="green">~/boost/libs/range</span> $ git fetch oventoboost
+<span class="green">~/boost/libs/range</span> $ git checkout oventoboost/<span class="red">develop</span>
+<span class="green">~/boost/libs/range</span> $ cd ../..
+<span class="green">           ~/boost</span> $ ./bootstrap.sh
+<span class="green">           ~/boost</span> $ ./b2
+        </pre>
+      </article>
+
+      <article>
+        <h3>改めてRegularとは</h3>
+        <pre class="smaller prettyprint lang-cpp">
+#include &lt;boost/range/adaptor/transformed.hpp&gt;
+#include &lt;boost/range/algorithm/copy.hpp&gt;
+#include &lt;boost/range/any_range.hpp&gt;
+#include &lt;iterator&gt;
+#include &lt;iostream&gt;
+
+template &lt;typename T&gt;
+using fwd_range = boost::any_range&lt;T, boost::forward_traversal_tag, T &amp;, ptrdiff_t&gt;;
+
+int main()
+{
+    const int array[] = { 0, 1, 2, 3 };
+
+    fwd_range&lt;int&gt; r = array
+        | boost::adaptors::transformed([](int i) { return i + 1; });
+    boost::copy(r, std::ostream_iterator&lt;int&gt;(std::cout, ", "));
+}
+        </pre>
+        <span class="build"><p class="red">→ 結果は？</p></span>
+      </article>
+
+      <article>
+        <h3>改めてRegularとは</h3>
+      </article>
+
+      <article>
+        <h3>追加されるAdaptor</h3>
+      </article>
+
+      <article>
+        <h3>今後の予定</h3>
+        <ul>
+          <li>名前考える →<b class="blue"> Boost.Range 2.1</b>とかそういうの</li>
+          <li><b class="blue">Boost 1.56.0</b>がリリースしたらdevelop MLにRFC投げる</li>
+          <li><b class="blue">Boost 1.57.0</b>のリリースに混ぜ込みたい</li>
+          <li>P-Stade.Ovenから更にアダプタを引っ張ってきて<b class="blue">Boost.Range 2.2</b>とか</li>
         </ul>
       </article>
 
@@ -96,7 +180,11 @@
       <article>
         <h3>range v3</h3>
         <ul>
-          <li>Author: Eric Niebler</li>
+          <li>Contributers
+          <table class="centered narrow smaller" style='border: none'>
+            <tr><th>Author</th><td>Eric Niebler</td></tr>
+          </table>
+          </li>
         </ul>
       </article>
 
