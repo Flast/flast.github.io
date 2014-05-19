@@ -29,13 +29,10 @@
 
   <style>
     table.centered { margin: 0px auto }
-    table.narrow { width: 75% }
+    table.narrow { width: 80% }
     table.smaller { font-size: 22px }
 
-    pre.smaller {
-      font-size: 20px;
-      line-height: 24px;
-    }
+    img.narrow { width: 80% }
   </style>
 
   <body style='display: none'>
@@ -119,21 +116,22 @@
 
       <article>
         <h3>How to use</h3>
-        <pre class="smaller">
-<span class="green">                 ~</span> $ git clone --recursive <a href="https://github.com/boostorg/boost.git">https://github.com/boostorg/boost.git</a> -b <span class="red">develop</span>
+<pre>
+<span class="green">                 ~</span> $ git clone --recursive <a href="https://github.com/boostorg/boost.git">https://github.com/boostorg/boost.git</a> \
+                       -b <span class="red">develop</span>
 <span class="green">                 ~</span> $ cd boost/libs/range
 <span class="green">~/boost/libs/range</span> $ git remote add oventoboost <a href="https://github.com/Flast/range.git">https://github.com/Flast/range.git</a>
 <span class="green">~/boost/libs/range</span> $ git fetch oventoboost
 <span class="green">~/boost/libs/range</span> $ git checkout oventoboost/<span class="red">develop</span>
 <span class="green">~/boost/libs/range</span> $ cd ../..
 <span class="green">           ~/boost</span> $ ./bootstrap.sh
-<span class="green">           ~/boost</span> $ ./b2
-        </pre>
+<span class="green">           ~/boost</span> $ ./b2</pre>
       </article>
 
-      <article>
+      <article class="smaller">
         <h3>改めてRegularとは</h3>
-        <pre class="smaller prettyprint lang-cpp">
+        <p>例えばBoost.Range 2.0のこういうコード</p>
+<pre class="prettyprint lang-cpp">
 #include &lt;boost/range/adaptor/transformed.hpp&gt;
 #include &lt;boost/range/algorithm/copy.hpp&gt;
 #include &lt;boost/range/any_range.hpp&gt;
@@ -150,22 +148,113 @@ int main()
     fwd_range&lt;int&gt; r = array
         | boost::adaptors::transformed([](int i) { return i + 1; });
     boost::copy(r, std::ostream_iterator&lt;int&gt;(std::cout, ", "));
-}
-        </pre>
-        <span class="build"><p class="red">→ 結果は？</p></span>
+}</pre>
+        <span class="build"><span class="red">→ 結果は？</span></span>
       </article>
 
       <article>
         <h3>改めてRegularとは</h3>
+        <span style="margin: 15px">
+          <img class="narrow centered" src='http://gyazo.flast.jp/791471fd221c9b8b054d4b5d362b55e6.png' />
+        </span>
       </article>
 
       <article>
-        <h3>追加されるAdaptor</h3>
+        <h3>今回<b class="red">追加</b> / <b class="blue">Regularで拡張</b>されるAdaptor</h3>
+        <table>
+          <tr>
+          <td>adjacent_filtered</td>
+          <td class="red">adjacent_zipped</td>
+          <td>copied</td>
+        </tr>
+        <tr>
+          <td class="red">dropped</td>
+          <td class="red">dropped_while</td>
+          <td class="red">elements</td>
+        </tr>
+        <tr>
+          <td class="red">elements_key</td>
+          <td class="blue">filtered</td>
+          <td>indexed</td>
+        </tr>
+        <tr>
+          <td>indirected</td>
+          <td>map_keys</td>
+          <td>map_values</td>
+        </tr>
+        <tr>
+          <td class="red">memoized</td>
+          <td class="red">outdirected</td>
+          <td>replaced</td>
+        </tr>
+        <tr>
+          <td class="blue">replaced_if</td>
+          <td>reversed</td>
+          <td>sliced</td>
+        </tr>
+        <tr>
+          <td>strided</td>
+          <td class="red">taken</td>
+          <td class="red">taken_while</td>
+        </tr>
+        <tr>
+          <td>tokenized</td>
+          <td class="blue">transformed</td>
+          <td>type_erased</td>
+        </tr>
+        <tr>
+          <td>uniqued</td>
+        </table>
       </article>
+
+<!--
+P-Stade.Oven ranges
+    adjacent_filtered
+    adjacent_transformed
+    always
+    applied
+    checked
+    cleared
+    concatenated
+    const_refs
+    constants
+    converted
+    copied_to
+    cycled
+    delimited
+    dropped
+    dropped_while
+    elements
+    elements_c
+    filtered
+    identities
+    indirected
+    outdirected
+    outplaced
+    jointed
+    map_keys
+    map_values
+    memoized
+    offset
+    permuted
+    pointed
+    popped
+    reversed
+    rotated
+    rvalues
+    scanned
+    sliced
+    sorted
+    steps
+    taken
+    taken_while
+    transformed
+    uniqued
+-->
 
       <article>
         <h3>今後の予定</h3>
-        <ul>
+        <ul class="build">
           <li>名前考える →<b class="blue"> Boost.Range 2.1</b>とかそういうの</li>
           <li><b class="blue">Boost 1.56.0</b>がリリースしたらdevelop MLにRFC投げる</li>
           <li><b class="blue">Boost 1.57.0</b>のリリースに混ぜ込みたい</li>
