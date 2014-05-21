@@ -274,7 +274,39 @@ P-Stade.Oven ranges
             <tr><th>Author</th><td>Eric Niebler</td></tr>
           </table>
           </li>
+          <li>C++11/14/17前提で書き直されたRangeライブラリ</li>
+          <li>実用に耐えるものでは<span class="red">ない</span></li>
+          <li>Boost等に依存しない完全に独立なライブラリ
+          <ul>
+            <li>Concept Checkもフルスクラッチ</li>
+          </ul></li>
         </ul>
+      </article>
+
+      <article>
+        <h3>Boost.Rangeとの違い</h3>
+        <ul>
+          <li>大きな違いは次の3つ</li>
+          <ul>
+            <li>実装が<span class="red">とてつもなく</span>面倒
+            <ul>
+              <li>iterator作って終わりではない</li>
+            </ul></li>
+            <li>Boost.Rangeで言うところの<span class="blue">Adaptor</span>は<span class="red">View</span>...らしい...?
+            <ul>
+              <li>らしい、というのは実装がとてつもなく面倒でわかりづらい上にドキュメントが無いのでわからない...</li>
+            </ul></li>
+            <li>Viewは過去分詞形とかではなく、現在形</li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Boost.IteratorのConceptとrange v3のConcept</h3>
+      </article>
+
+      <article>
+        <h3>Boost.RangeのConceptとrange v3のConcept</h3>
       </article>
 
     </section>
