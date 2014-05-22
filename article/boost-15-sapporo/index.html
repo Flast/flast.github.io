@@ -31,6 +31,8 @@
     table.centered { margin: 0px auto }
     table.narrow { width: 80% }
     table.smaller { font-size: 22px }
+
+    img.fitting { width: 80% }
   </style>
 
   <body style='display: none'>
@@ -166,12 +168,68 @@ int main()
           <li>正確には<span class="blue">Regular Concept</span>を満たしていない</li>
           <li>Regular Conceptというのは、大雑把に言うと
           <b><ol style="margin: 20px; margin-left: 40px" class="build">
-            <li>とりあえず作れて</li>
-            <li>代入できて</li>
-            <li>大体並べられる</li>
+            <li style="font-size: 40px">とりあえず作れて</li>
+            <li style="font-size: 40px">代入できて</li>
+            <li style="font-size: 40px">大体並べられる</li>
           </ol></b>
           もの</li>
         </ul>
+      </article>
+
+      <article>
+        <h3>まぁ、でも実際、</h3>
+        <div class="build">
+          <h1 class="centered">並べられなくていい</h1>
+        </div>
+      </article>
+
+      <article>
+        <h3>まぁ、でも実際、並べられなくていい</h3>
+        <p>ファンクタは普通に使える</p>
+<pre class="prettyprint lang-cpp">
+// ワタシハレギュラーチョットデキル
+struct I_can_satisfy_regular_a_little
+{
+    int operator()(int i) const { return i + 1; }
+};
+
+int main()
+{
+    const int array[] = { 0, 1, 2, 3 };
+
+    fwd_range&lt;int&gt; r = array
+        | boost::adaptors::transformed(<span class="red">I_can_satisfy_regular_a_little{}</span>);
+    boost::copy(r, std::ostream_iterator&lt;int&gt;(std::cout, ", "));
+}</pre>
+      </article>
+
+      <article>
+        <h3>regular関数/演算子</h3>
+        <ul>
+          <li>問題はC++11 lambdaとBoost.Lambdaが
+          <ul>
+            <li><span class="red">Default non-Construtible</span></li>
+          </ul></li>
+          かつ
+          <ul>
+            <li><span class="red">non-Assignable</span></li>
+          </ul>
+          なこと</li>
+          <li><span class="blue">regular関数/演算子</span>を使うといい感じにしてくれる</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>regular関数/演算子</h3>
+        <div style="margin: 10px">
+          <img class="fitting centered" src='http://gyazo.flast.jp/972b1fc18655ac2cb4d610423b520029.png' />
+      </article>
+
+      <article>
+        <h3>regular関数/演算子</h3>
+        <div style="margin: 10px">
+          <img class="fitting centered" src='http://gyazo.flast.jp/dddf3038b6b31b1f74d319940efd42de.png' />
+        </div>
       </article>
 
       <article>
