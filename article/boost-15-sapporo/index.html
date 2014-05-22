@@ -103,7 +103,7 @@
             <tr><th>Translator</th><td>Kazunori Tsumura</td></tr>
           </table>
           </li>
-          <li>(専ら)Boost.Range 2.0にP-Stade.OvenのAdaptorを追加する拡張
+          <li>(専ら)<b>Boost.Range 2.0</b>に<b>P-Stade.Oven</b>のAdaptorを追加する拡張
           <ul class="build">
             <li>P-Stade.Ovenのすべてのアダプタが追加されるわけでは<span class="red">ない</span></li>
             <li>個人的に欲しかった<span class="blue">copied_to</span>は入らない</li>
@@ -157,6 +157,21 @@ int main()
         <div style="margin: 10px">
           <img class="centered" src='http://gyazo.flast.jp/25b82cc44978ec423ce1cc29b7a084dc.png' />
         </div>
+      </article>
+
+      <article>
+        <h3>なぜエラーになる？</h3>
+        <ul class="build">
+          <li>よく見ると、<span class="red">DefaultConstructible</span>ではないというメッセージが見える</li>
+          <li>正確には<span class="blue">Regular Concept</span>を満たしていない</li>
+          <li>Regular Conceptというのは、大雑把に言うと
+          <b><ol style="margin: 20px; margin-left: 40px" class="build">
+            <li>とりあえず作れて</li>
+            <li>代入できて</li>
+            <li>大体並べられる</li>
+          </ol></b>
+          もの</li>
+        </ul>
       </article>
 
       <article>
