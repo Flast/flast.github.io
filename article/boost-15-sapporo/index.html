@@ -115,10 +115,11 @@
       <article>
         <h3>How to use</h3>
 <pre>
-<span class="green">                 ~</span> $ git clone --recursive <a href="https://github.com/boostorg/boost.git">https://github.com/boostorg/boost.git</a> \
-                       -b <span class="red">develop</span>
+<span class="green">                 ~</span> $ git clone --recursive -b <span class="red">develop</span> \
+                       <a href="https://github.com/boostorg/boost.git">https://github.com/boostorg/boost.git</a>
 <span class="green">                 ~</span> $ cd boost/libs/range
-<span class="green">~/boost/libs/range</span> $ git remote add oventoboost <a href="https://github.com/Flast/range.git">https://github.com/Flast/range.git</a>
+<span class="green">~/boost/libs/range</span> $ git remote add oventoboost \
+                       <a href="https://github.com/Flast/range.git">https://github.com/Flast/range.git</a>
 <span class="green">~/boost/libs/range</span> $ git fetch oventoboost
 <span class="green">~/boost/libs/range</span> $ git checkout oventoboost/<span class="red">develop</span>
 <span class="green">~/boost/libs/range</span> $ cd ../..
@@ -137,7 +138,8 @@
 #include &lt;iostream&gt;
 
 template &lt;typename T&gt;
-using fwd_range = boost::any_range&lt;T, boost::forward_traversal_tag, T &amp;, ptrdiff_t&gt;;
+using fwd_range =
+    boost::any_range&lt;T, boost::forward_traversal_tag, T &amp;, ptrdiff_t&gt;;
 
 int main()
 {

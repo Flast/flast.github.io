@@ -408,7 +408,7 @@ li::before {
 pre {
   font-family: 'Droid Sans Mono', 'Courier New', monospace;
 
-  font-size: 20px;
+  font-size: 24px;
   line-height: 28px;
   padding: 5px 10px;
 
@@ -568,8 +568,8 @@ article.smaller table {
   letter-spacing: 0;
 }
 article.smaller pre {
-  font-size: 15px;
-  line-height: 20px;
+  font-size: 18px;
+  line-height: 22px;
   letter-spacing: 0;
 }
 article.smaller q {
