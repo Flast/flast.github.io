@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+
+<!--
+  Boost.勉強会#15 札幌
+
+  Authors: Kohei Takahashi
+
+  URL: http://www.flast.jp/article/boost-15-sapporo/
+-->
+
+<html>
+  <head>
+    <title>オーブンレンジ2014夏モデル</title>
+
+    <meta charset='utf-8' />
+    <meta name='author' content='Kohei Takahashi' />
+    <meta name='viewport' content='width=1100,height=750' />
+    <meta name='apple-mobile-web-app-capable' content='yes' />
+
+    <script src='slides.js'></script>
+    <script src='prettify.js'></script>
+    <script>
+      window.onload = prettyPrint;
+    </script>
+
+    <link rel='stylesheet' type='text/css' href='styles.css' />
+    <link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|Droid+Sans+Mono' />
+  </head>
+
+  <style>
+    table.centered { margin: 0px auto }
+    table.narrow { width: 80% }
+    table.smaller { font-size: 22px }
+
+    img.fitting { width: 80% }
+  </style>
+
+  <body style='display: none'>
+
+    <section class="slides layout-widescreen template-boost">
+
+      <article>
+        <h1>
+          オーブンレンジ<br />2014夏モデル
+        </h1>
+        <p>
+          Kohei Takahashi
+          <br>
+          May 24, 2014
+        </p>
+      </article>
+
+      <article>
+        <h2>Who am I</h2>
+      </article>
+
+      <article>
+        <h3>Who am I</h3>
+        <ul>
+          <li>Twitter: <a href="https://twitter.com/Flast_RO">@Flast_RO</a> / <a href="https://wtiter.com/Flast_NET">@Flast_NET</a></li>
+          <li><a href="http://ftp.tsukuba.wide.ad.jp/">http://ftp.tsukuba.wide.ad.jp/</a></li>
+          <li><a href="http://www.ihanet.info/">IHANet</a> AS64623 <span class="build"><span style='color: red'>← 経路募集中</span></span></li>
+          <li>Cryoliteの敵<span class="build"><img class="centered" src='http://gyazo.flast.jp/e25fa07d4509f71e2af77e8a4c26d8f0.png' /></span>
+          </li>
+        </ul>
+      </article>
+
+      <article>
+        <h1>2014年新製品</h1>
+      </article>
+
+      <article>
+        <h2>東芝</h2>
+      </article>
+
+      <article>
+        <h3>東芝 ER-MD500</h3>
+        <img class="centered" src='http://www.toshiba.co.jp/tha/img/about/press/20140513_er-md500.jpg' />
+        <ul class="build">
+          <li>350℃まで加熱、5分で200℃まで</li>
+          <li>ワンタッチで選べる調理法
+          <ul class="build">
+            <li>表面を焼く高火力オーブンと、内部まで加熱する過熱水蒸気を組み合わせた「<span class="blue">ハイブリッド調理</span>」</li>
+            <li>油で揚げない揚げ物(ノンオイルフライ)が可能な「<span class="blue">ノンフライ調理</span>」</li>
+          </ul>
+          <li>発売時期: 6月上旬〜7月中旬</li>
+        </ul>
+        <div class="source">
+          出典: <a href='http://www.toshiba.co.jp/tha/about/press/140513.htm'>http://www.toshiba.co.jp/tha/about/press/140513.htm</a>
+        </div>
+      </article>
+
+      <article>
+        <h2>Boost.Range 2.0 w/ OvenToBoost</h2>
+      </article>
+
+      <article>
+        <h3>Boost.Range 2.0 w/ OvenToBoost</h3>
+        <ul>
+          <li>Contributers
+          <table class="centered narrow smaller" style='border: none'>
+            <tr><th>Original Author</th><td>Shunsuke Sogame</td></tr>
+            <tr><th>Author</th><td>Akira Takahashi</td></tr>
+            <tr><th>Commiter</th><td>Kohsuke Yuasa, Norihisa Fujita</td></tr>
+            <tr><th>Translator</th><td>Kazunori Tsumura</td></tr>
+          </table>
+          </li>
+          <li>(専ら)<b>Boost.Range 2.0</b>に<b>P-Stade.Oven</b>のAdaptorを追加する拡張
+          <ul class="build">
+            <li>P-Stade.Ovenのすべてのアダプタが追加されるわけでは<span class="red">ない</span></li>
+            <li>個人的に欲しかった<span class="blue">copied_to</span>は入らない</li>
+            <li>多分みんなが一番欲しいのは<span class="blue">Regular</span></li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>How to use</h3>
+<pre>
+<span class="green">                 ~</span> $ git clone --recursive -b <span class="red">develop</span> \
+                       <a href="https://github.com/boostorg/boost.git">https://github.com/boostorg/boost.git</a>
+<span class="green">                 ~</span> $ cd boost/libs/range
+<span class="green">~/boost/libs/range</span> $ git remote add oventoboost \
+                       <a href="https://github.com/Flast/range.git">https://github.com/Flast/range.git</a>
+<span class="green">~/boost/libs/range</span> $ git fetch oventoboost
+<span class="green">~/boost/libs/range</span> $ git checkout oventoboost/<span class="red">develop</span>
+<span class="green">~/boost/libs/range</span> $ cd ../..
+<span class="green">           ~/boost</span> $ ./bootstrap.sh
+<span class="green">           ~/boost</span> $ ./b2</pre>
+      </article>
+
+      <article class="smaller">
+        <h3>改めてRegularとは</h3>
+        <p>例えばBoost.Range 2.0のこういうコード</p>
+<pre class="prettyprint lang-cpp">
+#include &lt;boost/range/adaptor/transformed.hpp&gt;
+#include &lt;boost/range/algorithm/copy.hpp&gt;
+#include &lt;boost/range/any_range.hpp&gt;
+#include &lt;iterator&gt;
+#include &lt;iostream&gt;
+
+template &lt;typename T&gt;
+using fwd_range =
+    boost::any_range&lt;T, boost::forward_traversal_tag, T &amp;, ptrdiff_t&gt;;
+
+int main()
+{
+    const int array[] = { 0, 1, 2, 3 };
+
+    fwd_range&lt;int&gt; r = array
+        | boost::adaptors::transformed([](int i) { return i + 1; });
+    boost::copy(r, std::ostream_iterator&lt;int&gt;(std::cout, ", "));
+}</pre>
+      </article>
+
+      <article>
+        <h3>コンパイルすると...</h3>
+        <div style="margin: 10px">
+          <img class="centered" src='http://gyazo.flast.jp/25b82cc44978ec423ce1cc29b7a084dc.png' />
+        </div>
+      </article>
+
+      <article>
+        <h3>なぜエラーになる？</h3>
+        <ul class="build">
+          <li>よく見ると、<span class="red">DefaultConstructible</span>ではないというメッセージが見える</li>
+          <li>正確には<span class="blue">Regular Concept</span>を満たしていない</li>
+          <li>Regular Conceptというのは、大雑把に言うと
+          <b><ol style="margin: 20px; margin-left: 40px" class="build">
+            <li style="font-size: 40px">いい感じに作れて</li>
+            <li style="font-size: 40px">代入できて</li>
+            <li style="font-size: 40px">大体並べられる</li>
+          </ol></b>
+          もの</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>まぁ、でも実際、</h3>
+        <div class="build">
+          <h1 class="centered">並べられなくていい</h1>
+        </div>
+      </article>
+
+      <article>
+        <h3>まぁ、でも実際、並べられなくていい</h3>
+        <p>ファンクタは普通に使える</p>
+<pre class="prettyprint lang-cpp">
+struct succ
+{
+    int operator()(int i) const { return i + 1; }
+};
+
+int main()
+{
+    const int array[] = { 0, 1, 2, 3 };
+
+    fwd_range&lt;int&gt; r = array
+        | boost::adaptors::transformed(<span class="red">succ{}</span>);
+    boost::copy(r, std::ostream_iterator&lt;int&gt;(std::cout, ", "));
+}</pre>
+      </article>
+
+      <article>
+        <h3>regular関数 / 関数</h3>
+        <ul>
+          <li>問題はC++11 lambdaとBoost.Lambdaが
+          <ul>
+            <li><span class="red">Assignable</span>ではない</li>
+          </ul>
+          ことに加えて、C++11 lambdaに至っては
+          <ul>
+            <li><span class="red">Default Construtible</span>ではない</li>
+          </ul></li>
+          なこと</li>
+          <span class="build">
+          <li><span class="blue">regular関数/演算子</span>を使うといい感じにしてくれる</li>
+        </span>
+        </ul>
+      </article>
+
+      <article class="smaller">
+        <h3>regular関数</h3>
+<pre class="prettyprint lang-cpp">
+#include &lt;boost/range/adaptor/transformed.hpp&gt;
+#include &lt;boost/range/algorithm/copy.hpp&gt;
+#include &lt;boost/range/any_range.hpp&gt;
+#include &lt;boost/range/regular.hpp&gt;
+#include &lt;iterator&gt;
+#include &lt;iostream&gt;
+
+template &lt;typename T&gt;
+using fwd_range = boost::any_range&lt;T, boost::forward_traversal_tag, T &amp;, ptrdiff_t&gt;;
+
+int main()
+{
+    const int array[] = { 0, 1, 2, 3 };
+
+    fwd_range&lt;int&gt; r = array
+        | boost::adaptors::transformed(<span class="red">boost::regular</span>([](int i) { return i + 1; }));
+    boost::copy(r, std::ostream_iterator&lt;int&gt;(std::cout, ", "));
+}</pre>
+      </article>
+
+      <article class="smaller">
+        <h3>regular演算子</h3>
+<pre class="prettyprint lang-cpp">
+#include &lt;boost/range/adaptor/transformed.hpp&gt;
+#include &lt;boost/range/algorithm/copy.hpp&gt;
+#include &lt;boost/range/any_range.hpp&gt;
+#include &lt;iterator&gt;
+#include &lt;iostream&gt;
+
+template &lt;typename T&gt;
+using fwd_range = boost::any_range&lt;T, boost::forward_traversal_tag, T &amp;, ptrdiff_t&gt;;
+
+int main()
+{
+    const int array[] = { 0, 1, 2, 3 };
+
+    fwd_range&lt;int&gt; r = array
+        <span class="red">|+</span> boost::adaptors::transformed([](int i) { return i + 1; });
+    boost::copy(r, std::ostream_iterator&lt;int&gt;(std::cout, ", "));
+}</pre>
+      </article>
+
+      <article>
+        <h3>regular関数/演算子</h3>
+        <div style="margin: 10px">
+          <img class="fitting centered" src='http://gyazo.flast.jp/972b1fc18655ac2cb4d610423b520029.png' />
+      </article>
+
+      <article>
+        <h3>regular関数/演算子</h3>
+        <div style="margin: 10px">
+          <img class="fitting centered" src='http://gyazo.flast.jp/dddf3038b6b31b1f74d319940efd42de.png' />
+        </div>
+      </article>
+
+      <article>
+        <h3>今回<b class="red">追加</b> / <b class="blue">Regularで拡張</b>されるAdaptor</h3>
+        <table>
+          <tr>
+          <td>adjacent_filtered</td>
+          <td class="red">adjacent_zipped</td>
+          <td>copied</td>
+        </tr>
+        <tr>
+          <td class="red">dropped</td>
+          <td class="red">dropped_while</td>
+          <td class="red">elements</td>
+        </tr>
+        <tr>
+          <td class="red">elements_key</td>
+          <td class="blue">filtered</td>
+          <td>indexed</td>
+        </tr>
+        <tr>
+          <td>indirected</td>
+          <td>map_keys</td>
+          <td>map_values</td>
+        </tr>
+        <tr>
+          <td class="red">memoized</td>
+          <td class="red">outdirected</td>
+          <td>replaced</td>
+        </tr>
+        <tr>
+          <td class="blue">replaced_if</td>
+          <td>reversed</td>
+          <td>sliced</td>
+        </tr>
+        <tr>
+          <td>strided</td>
+          <td class="red">taken</td>
+          <td class="red">taken_while</td>
+        </tr>
+        <tr>
+          <td>tokenized</td>
+          <td class="blue">transformed</td>
+          <td>type_erased</td>
+        </tr>
+        <tr>
+          <td>uniqued</td>
+        </table>
+      </article>
+
+      <article>
+        <h3>今後の予定</h3>
+        <ul class="build">
+          <li>名前考える →<b class="blue"> Boost.Range 2.1</b>とかそういうの</li>
+          <li><b class="blue">Boost 1.56.0</b>がリリースしたらdevelop MLにRFC投げる</li>
+          <li><b class="blue">Boost 1.57.0</b>のリリースに混ぜ込みたい</li>
+          <li>P-Stade.Ovenから更にアダプタを引っ張ってきて<b class="blue">Boost.Range 2.2</b>とか</li>
+        </ul>
+      </article>
+
+      <article>
+        <h2>range v3</h2>
+      </article>
+
+      <article>
+        <h3>range v3</h3>
+        <ul>
+          <li>Contributers
+          <table class="centered narrow smaller" style='border: none'>
+            <tr><th>Author</th><td>Eric Niebler</td></tr>
+          </table>
+          </li>
+          <li>C++11/14/17前提で書き直されたRangeライブラリ</li>
+          <li>Boost等に依存しない完全に独立なライブラリ
+          <ul>
+            <li>Concept Checkもフルスクラッチ</li>
+          </ul></li>
+          <li>OvenToBoost(Boost.Range)よりは比較的多くのアルゴリズムを実装している
+          <ul class="build">
+            <li>と言ったな、これは<span class="red">嘘だ</span></li>
+            <li><span class="red">だいたい空ファイル</span></li>
+          </ul></li>
+          <span class="build"><li>テストは<span class="blue"><b>"</b>大体の場合<b>"</b></span>通る</li></span>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Boost.Rangeとの違い</h3>
+        <ul>
+          <li>大きな違いは次の3つ</li>
+          <ul>
+            <li>Boost.Rangeで言うところの<span class="blue">Adaptor</span>は<span class="red">View</span>...らしい...?
+            <ul>
+              <li>らしい、というのは実装がとてつもなく面倒でわかりづらい上にドキュメントが無いのでわからない...</li>
+            </ul></li>
+            <li>Viewは過去分詞形とかではなく、現在形
+            <ul>
+              <li><span class="blue">boost::transformed</span>だったのが<span class="blue">ranges::v3::transform</span></li>
+            </ul></li>
+            <li>実装が<span class="red">とてつもなく</span>面倒
+            <ul>
+                <li>viewはiterator作って終わりではない</li>
+                <li>iteratorをcursorにして、そこからadaptorを作るとviewが作れて、そいつをpipableオブジェクトに...</li>
+            </ul></li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>あそびかた</h3>
+        <ol>
+          <li>githubにあるリポジトリをcloneする
+<pre>
+<span class="green">~</span> $ git clone <a href="https://github.com/ericniebler/range-v3.git">https://github.com/ericniebler/range-v3.git</a></pre>
+          </li>
+          <li>なんかコード書いてみる</li>
+          <li>コンパイル
+<pre>
+<span class="green">~</span> $ g++-4.9.0 <span class="red">-std=gnu++11</span> -I range-v3/include test.cpp</pre>
+          </li>
+        </ol>
+      </article>
+
+      <article>
+        <h3>あそんでみる</h3>
+<pre class="prettyprint lang-cpp">
+#include &lt;range/v3/algorithm/copy.hpp&gt;
+#include &lt;range/v3/view/indirect.hpp&gt;
+#include &lt;iostream&gt;
+#include &lt;iterator&gt;
+
+int main()
+{
+    const int src[] = { 0, 1, 2, 3 };
+    const int *isrc[sizeof(src) / sizeof(int)];
+
+    ranges::copy(src, isrc, [](const int &amp;i) { return &amp;i; });
+
+    for (int i : isrc | ranges::view::indirect)
+        std::cout &lt;&lt; i &lt;&lt; ", ";
+    std::cout &lt;&lt; std::endl;
+}</pre>
+      </article>
+
+      <article>
+        <h3>あそんでみる</h3>
+        <ul>
+          <li>Range Algorithmには<span class="red">Projection</span>パラメータが追加された</li>
+          <li>Projectionは各要素をAlgorithmに適用する直前に呼ばれる</li>
+          <li>最後はtransform viewを使わなくてもよくなった</li>
+          <li>P-Stade.Ovenのtapped adaptorみたいなこともできる</li>
+        </ul>
+      </article>
+
+      <article class="smaller">
+        <h3>あそんでみる2</h3>
+        <p>例えばBoost.Range 2.0で書いたこういうコード</p>
+<pre class="prettyprint lang-cpp">
+#include &lt;boost/range/adaptor/transformed.hpp&gt;
+#include &lt;boost/range/algorithm/copy.hpp&gt;
+#include &lt;iterator&gt;
+#include &lt;iostream&gt;
+
+struct succ
+{
+    int operator()(int i) const { return i + 1; }
+};
+
+int main()
+{
+    const int array[] = { 0, 1, 2, 3 };
+
+    boost::copy(
+      array | boost::adaptors::transformed(succ{}),
+      std::ostream_iterator&lt;int&gt;(std::cout, ", "));
+}</pre>
+      </article>
+
+      <article class="smaller">
+        <h3>あそんでみる2</h3>
+        <p>range v3に書き直してみるとこんな感じ</p>
+<pre class="prettyprint lang-cpp">
+#include &lt;range/v3/algorithm/copy.hpp&gt;
+#include &lt;range/v3/view/transform.hpp&gt;
+#include &lt;iostream&gt;
+#include &lt;iterator&gt;
+
+struct I_can_satisfy_regular_a_little
+{
+    int operator()(int i) const { return i + 1; }
+};
+
+int main()
+{
+    const int array[] = { 0, 1, 2, 3 };
+
+    <span class="red">ranges::copy</span>(
+        array | <span class="red">ranges::view::transform</span>(I_can_satisfy_regular_a_little{}),
+        std::ostream_iterator&lt;int&gt;(std::cout, ", "));
+}</pre>
+      </article>
+
+      <article>
+        <h3>コンパイルすると...</h3>
+        <div style="margin: 10px">
+          <img class="centered" src='http://gyazo.flast.jp/c8f775d584dc7fab8894ea89c093575a.png'>
+        </div>
+      </article>
+
+      <article>
+        <h3>つらみが高い...</h3>
+        <ul>
+          <li>エラーとなった理由はstd::ostream_iteratorが<span class="blue">WeaklyIncrementable</span>ではないということ
+          <ul>
+            <li>is_integral&lt;std::ostream_iterator::difference_type&gt; == trueではない</li>
+            <li>std::ostream_iteratorが<span class="blue">SemiRegular</span>ではない</li>
+            <span class="build"><li><b class="red">あとなんかわからないけどエラーになる...</b></li></span>
+          </ul></li>
+          <span class="build"><li>range v3的には<span class="blue">OutputIterator</span>は<span class="blue">WeaklyIncrementable</span>でもある
+            <ul>
+              <li>std::ostream_iteratorはOutputIteratorですらない</li>
+          </ul></li></span>
+        </ul>
+      </article>
+
+      <article>
+        <h3>SemiRegular</h3>
+        <ul>
+          <li>Regularはなんか無駄な要求があったからちょっと弱めたRegular</li>
+          <span class="build"><li>つまり、大雑把に言うと
+            <b><ol style="margin: 20px; margin-left: 40px" class="build">
+                <li style="font-size: 40px">いい感じに作れて</li>
+                <li style="font-size: 40px">代入できる</li>
+          </ol></b></li></span>
+          <span class="build"><li>大体これぐらい満たせていればいい感じなので、Regularより使われている</li></span>
+        </ul>
+      </article>
+
+      <article>
+        <h3>range v3まとめ</h3>
+        <ul class="build">
+          <li>Regularをいい感じにしたSemiRegularがある</li>
+          <li>Conceptが細かい割にちょっと厳しくなってる</li>
+          <li>Projectionがあるからtransform viewの出番は少なくなった</li>
+          <li>テストは大体の場合通る</li>
+          <li>書いたコードは大体コンパイルできると思う</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Question?</h3>
+      </article>
+
+    </section>
+
+  </body>
+</html>
