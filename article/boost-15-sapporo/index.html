@@ -462,7 +462,7 @@ int main()
 #include &lt;iostream&gt;
 #include &lt;iterator&gt;
 
-struct I_can_satisfy_regular_a_little
+struct succ
 {
     int operator()(int i) const { return i + 1; }
 };
@@ -472,7 +472,7 @@ int main()
     const int array[] = { 0, 1, 2, 3 };
 
     <span class="red">ranges::copy</span>(
-        array | <span class="red">ranges::view::transform</span>(I_can_satisfy_regular_a_little{}),
+        array | <span class="red">ranges::view::transform</span>(succ{}),
         std::ostream_iterator&lt;int&gt;(std::cout, ", "));
 }</pre>
       </article>
