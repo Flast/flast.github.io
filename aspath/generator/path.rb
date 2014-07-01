@@ -31,7 +31,7 @@ class ASpath < GraphViz
 
   def initialize(origin)
     super :aspath, type: :digraph do |g|
-      g.graph[:label] = "AS-path at AS#{origin} - #{DateTime.now}"
+      g.graph[:label] = "AS-path on AS#{origin} - #{DateTime.now}"
       g.graph[:center] = ""
     end
 
