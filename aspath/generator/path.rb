@@ -2,6 +2,7 @@
 
 require 'set'
 require 'date'
+require 'json'
 require 'ruby-graphviz'
 
 class ASpath < GraphViz
@@ -28,6 +29,7 @@ class ASpath < GraphViz
   end
 
   attr_reader :origin
+  attr_accessor :info
 
   def initialize(origin)
     super :aspath, type: :digraph do |g|
@@ -40,12 +42,21 @@ class ASpath < GraphViz
     @path[@origin][:peripheries] = 2
   end
 
+  def update_info
+    @info.each do |k, v|
+      @path[k][:label] = k + '\n<' + v + '>' if @path.has_key? k
+    end
+  end
+
   def [](asn)
     @path[asn]
   end
 end
 
 path = ASpath.new ARGV[0]
+open("asinfo.json") do |io|
+  path.info = JSON.load(io)
+end
 
 def aspath?(path)
   return unless path.length > 1
@@ -64,5 +75,6 @@ STDIN.each_line do |line|
   l.each_cons(2) {|l, r| path[l] << r}
 end
 
+path.update_info
 path.output png: "as#{ARGV[0]}.png"
 path.output dot: "as#{ARGV[0]}.gv"
