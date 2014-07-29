@@ -31,10 +31,11 @@ class ASpath < GraphViz
   attr_reader :origin
   attr_accessor :info
 
-  def initialize(origin)
+  def initialize(origin, layout)
     super :aspath, type: :digraph do |g|
       g.graph[:label] = "AS-path on AS#{origin} - #{DateTime.now}"
       g.graph[:center] = ""
+      g.graph[:layout] = layout
     end
 
     @origin = origin
@@ -51,9 +52,13 @@ class ASpath < GraphViz
   def [](asn)
     @path[asn]
   end
+
+  def layout=(l)
+    super[:layout] = l
+  end
 end
 
-path = ASpath.new ARGV[0]
+path = ASpath.new ARGV[0], 'fdp'
 open("asinfo.json") do |io|
   path.info = JSON.load(io)
 end
