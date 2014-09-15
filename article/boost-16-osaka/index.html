@@ -312,9 +312,39 @@
           <li>2013/11/11 リリース</li>
           <li>新ライブラリ
           <ul>
-            <li><a href='http://www.boost.org/doc/libs/1_55_0/libs/predef'>Predef</a>：</li>
-          </ul>
+            <li><a href='http://www.boost.org/doc/libs/1_55_0/libs/predef'>Predef</a>：プラットフォーム、アーキテクチャとかコンパイラバージョンとか、正規化してくれるライブラリ
+            <ul>
+              <li>ConfigはBoost内部向けなので細かすぎてユーザは使いづらい</li>
+            </ul></li>
+          </ul></li>
+          <li>古いコンパイラのサポートが切られた
+          <ul>
+            <li>Digital Mars &lt; 8.41</li>
+            <li>GCC &lt; 3.3</li>
+            <li>Intel &lt; 6.0</li>
+            <li>Visual C++ &lt; 7.1</li>
+          </ul></li>
         </ul>
+      </article>
+
+      <article>
+        <h3>Boost.Predef</h3>
+        <ul>
+          <li>例えばコンパイラのバージョンをとったり
+        <pre class="prettyprint lang-cpp">
+#include &lt;boost/predef.h&gt;
+#include &lt;iostream&gt;
+
+int main()
+{
+    std::cout &lt;&lt;
+#if BOOST_COMP_GNUC &gt;= BOOST_VERSION_NUMBER(5,0,0)
+        "GCC 5.0 or later"
+#else
+        "GCC 4.x or earlier"
+#endif
+      &gt;&gt; std::endl;
+}</pre></li>
       </article>
 
       <article>
