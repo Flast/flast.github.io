@@ -111,100 +111,33 @@
 
       <article>
         <h3>今回振り返るバージョン</h3>
-        <div style='float: left; width: 35%'>
+        <div style='float: left; width: 40%'>
           <ul>
-            <li>Boost 1.33</li>
-            <li>Boost 1.34</li>
-            <li>Boost 1.35</li>
-            <li>Boost 1.36</li>
-            <li>Boost 1.37</li>
-            <li>Boost 1.38</li>
-            <li>Boost 1.39</li>
-          </ul>
-        </div>
-        <div style='float: left; width: 30%'>
-          <ul>
-            <li>Boost 1.40</li>
-            <li>Boost 1.41</li>
-            <li>Boost 1.42</li>
+            <li>Boost 1.41 - <span style='color: red'>RHEL 6</span></li>
+            <li>Boost 1.42 - <span style='color: red'>Debian 6</span></li>
             <li>Boost 1.43</li>
             <li>Boost 1.44</li>
             <li>Boost 1.45</li>
             <li>Boost 1.46</li>
             <li>Boost 1.47</li>
             <li>Boost 1.48</li>
-            <li>Boost 1.49</li>
           </ul>
         </div>
-        <div style='float: right; width: 30%'>
+        <div style='float: left; width: 60%'>
           <ul>
+            <li>Boost 1.49 - <span style='color: red'>Debian 7 Ubuntu 13.04</span></li>
             <li>Boost 1.50</li>
             <li>Boost 1.51</li>
             <li>Boost 1.52</li>
-            <li>Boost 1.53</li>
-            <li>Boost 1.54</li>
-            <li>Boost 1.55</li>
+            <li>Boost 1.53 - <span style='color: red'>RHEL 7 Ubuntu 13.04/13.10</span></li>
+            <li>Boost 1.54 - <span style='color: red'>Ubuntu 14.04</span></li>
+            <li>Boost 1.55 - <span style='color: red'>Ubuntu 14.04</span></li>
             <li>Boost 1.56</li>
           </ul>
         </div>
-      </article>
-
-      <article>
-        <h3>Boost 1.33</h3>
-        <ul>
-          <li>2005/8/11 リリース</li>
-          <li>1.33.1は2006/12/5 リリース</li>
-        </ul>
-      </article>
-
-      <article>
-        <h3>Boost 1.34</h3>
-        <ul>
-          <li>2007/5/12 リリース</li>
-          <li>1.34.1は2007/7/24リリース</li>
-        </ul>
-      </article>
-
-      <article>
-        <h3>Boost 1.35</h3>
-        <ul>
-          <li>2008/3/29 リリース</li>
-        </ul>
-      </article>
-
-      <article>
-        <h3>Boost 1.36</h3>
-        <ul>
-          <li>2008/8/14 リリース</li>
-        </ul>
-      </article>
-
-      <article>
-        <h3>Boost 1.37</h3>
-        <ul>
-          <li>2008/11/3 リリース</li>
-        </ul>
-      </article>
-
-      <article>
-        <h3>Boost 1.38</h3>
-        <ul>
-          <li>2009/2/8 リリース</li>
-        </ul>
-      </article>
-
-      <article>
-        <h3>Boost 1.39</h3>
-        <ul>
-          <li>2009/5/2 リリース</li>
-        </ul>
-      </article>
-
-      <article>
-        <h3>Boost 1.40</h3>
-        <ul>
-          <li>2009/8/27 リリース</li>
-        </ul>
+        <div style='float: none; width: 70%'>
+          <p>1.41 - 1.53までの間は軽い感じで飛ばしていきます</p>
+        </div>
       </article>
 
       <article>
@@ -303,6 +236,16 @@
         <h3>Boost 1.54</h3>
         <ul>
           <li>2013/7/1 リリース</li>
+          <li>新ライブラリ
+          <ul>
+            <li><a href='http://www.boost.org/doc/libs/1_54_0/libs/log'>Log</a>：ロギングライブラリ</li>
+            <li><a href='http://www.boost.org/doc/libs/1_54_0/libs/tti'>TTI</a>：Type Traitsがコア言語周りのメタ関数を揃えている一方、TTIはクラス内部の情報を引っ張ってくるライブラリ</li>
+            <li><a href='http://www.boost.org/doc/libs/1_54_0/libs/type_erasure'>TypeErasure</a>：type erasureテクニックを行うためのライブラリ</li>
+          </ul></li>
+          <li>非推奨ライブラリ
+          <ul>
+            <li><a href='http://www.boost.org/doc/libs/1_54_0/libs/signals'>Signals</a>：Signals2をつかいましょう</li>
+          </ul></li>
         </ul>
       </article>
 
@@ -317,13 +260,19 @@
               <li>ConfigはBoost内部向けなので細かすぎてユーザは使いづらい</li>
             </ul></li>
           </ul></li>
-          <li>古いコンパイラのサポートが切られた
+          <li>古すぎるコンパイラのサポートが切られた
           <ul>
             <li>Digital Mars &lt; 8.41</li>
             <li>GCC &lt; 3.3</li>
             <li>Intel &lt; 6.0</li>
             <li>Visual C++ &lt; 7.1</li>
           </ul></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>VC++ 7.0が切られた！</h3>
+        <ul>
         </ul>
       </article>
 
@@ -345,6 +294,50 @@ int main()
 #endif
       &gt;&gt; std::endl;
 }</pre></li>
+      </article>
+
+      <article>
+        <h3>Boost.Predef</h3>
+        <ul>
+          <li>エンディアンとったりできる
+        <pre class="prettyprint lang-cpp">
+#include &lt;iostream&gt;
+#include &lt;tuple&gt;
+#include &lt;boost/predef.h&gt;
+int main()
+{
+    union {
+        unsigned short raw;
+        struct {
+#if defined(BOOST_ENDIAN_BIG_BYTE_AVAILABLE)
+            unsigned char high;
+            unsigned char low;
+#elif defined(BOOST_ENDIAN_LITTLE_BYTE_AVAILABLE)
+            unsigned char low;
+            unsigned char high;
+#endif
+        };
+    } x;
+    std::tie(x.high, x.low) = std::make_tuple(0x42u, 0x72u);
+    std::cout &lt;&lt; std::hex &lt;&lt; "0x" &lt;&lt; x.raw &lt;&lt; std::endl;
+}</pre></li>
+      </article>
+
+      <article>
+        <h3>Boost.Predef</h3>
+        <ul>
+          <li>主にバージョンの正規化関連が多い</li>
+          <li>長い間<del>見なかったことにしていた</del> 解決できていなかった<br />boost/detail/endian.hppのライセンス問題を解決</li>
+          <li>1.56時点で実装しているのは以下の通り
+          <ul>
+            <li>BOOST_ARCH_xxx: アーキテクチャ関連</li>
+            <li>BOOST_COMP_xxx: コンパイラ関連</li>
+            <li>BOOST_LANG_xxx: 言語関連</li>
+            <li>BOOST_LIB_xxx: C/C++の標準ライブラリ関連</li>
+            <li>BOOST_OS_xxx: OS種別関連</li>
+            <li>BOOST_PLAT_xxx: プラットフォーム(Winデスクトップ？Phone？)</li>
+          </ul></li>
+        </ul>
       </article>
 
       <article>
