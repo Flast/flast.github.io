@@ -187,6 +187,13 @@
         <h3>Boost 1.47</h3>
         <ul>
           <li>2011/7/11 リリース</li>
+          <li>新ライブラリ
+          <ul>
+            <li><a href='http://www.boost.org/doc/libs/1_47_0/libs/chrono'>Chrono</a>：C++11のstd::chrono相当</li>
+            <li><a href='http://www.boost.org/doc/libs/1_47_0/libs/geometry'>Geometry</a>：幾何を扱うライブラリ</li>
+            <li><a href='http://www.boost.org/doc/libs/1_47_0/libs/phoenix'>Phoenix</a>：Boost.Lambda的なDSL</li>
+            <li><a href='http://www.boost.org/doc/libs/1_47_0/libs/ratio'>Ratio</a>：C++11のstd::ratio相当</li>
+          </ul></li>
         </ul>
       </article>
 
@@ -194,6 +201,12 @@
         <h3>Boost 1.48</h3>
         <ul>
           <li>2011/11/15 リリース</li>
+          <li>新ライブラリ
+          <ul>
+            <li><a href='http://www.boost.org/doc/libs/1_48_0/libs/container'>Container</a>：C++11のSTLコンテナ互換ライブラリ</li>
+            <li><a href='http://www.boost.org/doc/libs/1_48_0/libs/locale'>Locale</a>：ローカライゼーションライブラリ</li>
+            <li><a href='http://www.boost.org/doc/libs/1_48_0/libs/move'>Move</a>：C++11のmove semanticsをエミュレートするライブラリ</li>
+          </ul></li>
         </ul>
       </article>
 
@@ -201,6 +214,10 @@
         <h3>Boost 1.49</h3>
         <ul>
           <li>2012/2/24 リリース</li>
+          <li>新ライブラリ
+          <ul>
+            <li><a href='http://www.boost.org/doc/libs/1_49_0/libs/heap'>Heap</a>：std::priority_queueのバリエーション</li>
+          </ul></li>
         </ul>
       </article>
 
@@ -208,6 +225,17 @@
         <h3>Boost 1.50</h3>
         <ul>
           <li>2012/6/28 リリース</li>
+          <li>新ライブラリ
+          <ul>
+            <li><a href='http://www.boost.org/doc/libs/1_50_0/libs/algorithm'>Algorithm</a>：C++11で追加されたアルゴリズムC++03版とか</li>
+            <li><a href='http://www.boost.org/doc/libs/1_50_0/libs/functional/overloaded_function'>Functional/OverloadedFunction</a>：C11の_Genericsの様なライブラリ</li>
+            <li><a href='http://www.boost.org/doc/libs/1_50_0/libs/local_function'>LocalFunction</a>：GNU拡張のローカル関数みたいに書けるライブラリ</li>
+            <li><a href='http://www.boost.org/doc/libs/1_50_0/libs/utility/identity_type'>Utility/IdentityType</a>：マクロの中でも,を使えるようにするライブラリ</li>
+          </ul></li>
+          <li>新しいライブラリは昔ブログにまとめたのでそちらを
+          <ul>
+            <li><a href='http://flast.hateblo.jp/entry/2012/07/04/151104'>http://flast.hateblo.jp/entry/2012/07/04/151104</a></li>
+          </ul></li>
         </ul>
       </article>
 
@@ -215,6 +243,13 @@
         <h3>Boost 1.51</h3>
         <ul>
           <li>2012/8/20 リリース</li>
+          <li>新ライブラリ
+          <ul>
+            <li><a href='http://www.boost.org/doc/libs/1_51_0/libs/context'>Context</a>：コンテキストスイッチを行う低レベルライブラリ
+            <ul>
+              <li>直接は使わないのが吉(1.53以降のCoroutineを使ったほうが良い)</li>
+              <li>大体変わる</li>
+            </ul>
         </ul>
       </article>
 
@@ -222,6 +257,15 @@
         <h3>Boost 1.52</h3>
         <ul>
           <li>2012/11/5 リリース</li>
+          <li>新ライブラリ
+          <ul>
+            <li>なし</li>
+          </ul></li>
+          <li>boost::result_ofが、n3276 decltypeの可否でTR1実装かdecltype実装かが切り替わる
+          <ul>
+            <li>詳細は昔ブログにまとめたのでそちらを</li>
+            <li><a href='http://flast.hateblo.jp/entry/2012/11/30/045950'>http://flast.hateblo.jp/entry/2012/11/30/045950</a></li>
+          </ul></li>
         </ul>
       </article>
 
@@ -229,7 +273,37 @@
         <h3>Boost 1.53</h3>
         <ul>
           <li>2013/2/4 リリース</li>
+          <li>新ライブラリ
+          <ul>
+            <li><a href='http://www.boost.org/doc/libs/1_53_0/libs/atomic'>Atomic</a>：C++11のstd::atomicをエミュレートしたライブラリ</li>
+            <li><a href='http://www.boost.org/doc/libs/1_53_0/libs/coroutine'>Coroutine</a>：Boost.Contextをベースにしたコルーチンライブラリ
+            <ul>
+              <li>1.56以降のCoroutineを使ったほうが良い</li>
+              <li>大体変わる</li>
+            </ul></li>
+            <li><a href='http://www.boost.org/doc/libs/1_53_0/libs/lockfree'>Lockfree</a>：ロックフリーコンテナのライブラリ</li>
+            <li><a href='http://www.boost.org/doc/libs/1_53_0/libs/multiprecision'>Multiprecision</a>：多倍長(整|(浮動|固定)少)数のライブラリ</li>
+            <li><a href='http://www.boost.org/doc/libs/1_53_0/libs/numeric/odeint'>Numeric/ODEInt</a>：常微分方程式を解くライブラリ</li>
+          </ul></li>
         </ul>
+      </article>
+
+      <article>
+        <h3>Boost.ContextとBoost.Coroutine</h3>
+        <ul>
+          <li>Oliver曰く、ContextはCSに8ns、Coroutineは10nsかかる、らしい
+          <ul>
+            <li>ref. <a href='http://lists.boost.org/boost-users/2014/09/82912.php'>http://lists.boost.org/boost-users/2014/09/82912.php</a></li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Boost.Multiprecision</h3>
+      </article>
+
+      <article>
+        <h3>Boost.Numeric/ODEInt</h3>
       </article>
 
       <article>
