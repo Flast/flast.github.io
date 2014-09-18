@@ -76,7 +76,10 @@
         次期標準だったり、プリプロセッサのようなよくわからない話ではなく
         <ul>
           <li>Boostの今を知るために、各バージョンでどういう進化をしてきたのか</li>
-          <li>これからのBoostにはどんなものが提案されているのか</li>
+          <li><del>これからのBoostにはどんなものが提案されているのか</del>
+          <ul class='smaller'>
+            <li>ここまで調べてる時間が無かったので割愛</li>
+          </ul></li>
           <li>これからBoostの開発に関わっていくにはどうしたらいいのか</li>
         </ul>
         を軽い感じで話していきます
@@ -89,7 +92,7 @@
           <li>9ヶ月経ってやっとBoost 1.56.0がリリースされた</li>
           <li>RHEL7、CentOS7がリリースされた</li>
           <li>Debian stableもやっと7になった</li>
-          <li>過去を振り返りつつ、出来ること出来ないことを振り返ってみよう</li>
+          <li>過去を振り返りつつ、各バージョンで出来ること出来ないことを再確認</li>
           <li>もとよりC++使えない？しらんがな</li>
         </ul>
       </article>
@@ -106,7 +109,7 @@
       </article>
 
       <article>
-        <h2>前半：これまでのBoost</h2>
+        <h2>前半：これまで〜最近のBoost</h2>
       </article>
 
       <article>
@@ -191,6 +194,7 @@
             <li><a href='http://www.boost.org/doc/libs/1_47_0/libs/phoenix'>Phoenix</a>：Boost.Lambda的なDSL</li>
             <li><a href='http://www.boost.org/doc/libs/1_47_0/libs/ratio'>Ratio</a>：C++11のstd::ratio相当</li>
           </ul></li>
+          <li>大体このバージョン付近から、C++11で標準化されたライブラリをC++03でも使える様に代替実装を用意し始めた</li>
         </ul>
       </article>
 
@@ -449,11 +453,73 @@ int main()
       </article>
 
       <article>
-        <h3>意外と便利なBoost.Core</h3>
+        <h3>Boostのモジュール化とBoost.Core</h3>
+        <ul>
+          <li>2013/10/17、1.55.0リリース直前にStephen Kellyが"Boostのモジュール化"を提案
+          <ul>
+            <li><a href='http://lists.boost.org/Archives/boost/2013/10/207384.php'>http://lists.boost.org/Archives/boost/2013/10/207384.php</a></li>
+            <li>githubへの移行でライブラリ毎にリポジトリが別れることになったきっかけ<span class='smaller'>...のはず</span></li>
+          </ul></li>
+          <li>2014/5/30にJulian Gonggrijpが再度"Boostのモジュール化"を提案
+          <ul>
+            <li><a href='http://lists.boost.org/Archives/boost/2014/05/213682.php'>http://lists.boost.org/Archives/boost/2014/05/213682.php</a></li>
+          </ul></li>
+          <li>2014/5/31にPeter DimovがBoost.Coreを提案
+          <ul>
+            <li><a href='http://lists.boost.org/Archives/boost/2014/05/213778.php'>http://lists.boost.org/Archives/boost/2014/05/213778.php</a></li>
+            <li>初期のメンテナはPeter Dimov, Glen Fernandes, Andrey Semashev</li>
+          </ul></li>
+          <li>2014/6/4にVicente J. Botet Escribaによってレベル分けも追って提案
+          <ul>
+            <li><a href='http://lists.boost.org/Archives/boost/2014/06/213945.php'>http://lists.boost.org/Archives/boost/2014/06/213945.php</a></li>
+          </ul></li>
+        </ul>
       </article>
 
       <article>
-        <h2>後半：いま〜これからのBoost</h2>
+        <h3>Boostのモジュール化とBoost.Core</h3>
+        <ul>
+          <li>各ライブラリ間の複雑な依存関係を取り除く為に、他のライブラリから参照されるが、他のライブラリに依存しないモジュールを用意
+          <ul>
+            <li>例外としてConfigやPredef、PP等への依存は容認</li>
+          </ul></li>
+          <li><b>"ユーザが便利に使うためのライブラリ"<span style='color: red'>ではない</span></b></li>
+          <li>それまで各ライブラリが独自に(detail空間に)実装していた細かいユーティリティ等が集約された
+          <ul>
+            <li>便利に思った他のライブラリのメンテナそこを参照してしまうのが複雑な依存関係の現況</li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>どれぐらい複雑なのか</h3>
+        <ul>
+          <li>Stephen Kellyが自身のサーバにpngを置いてくれているのでそれを見てみるとわかる
+          <ul>
+            <li>同じ所にdot(Graphviz)も置いてくれているので、自前でpngを生成も出来る</li>
+          </ul></li>
+          <li><a href='http://www.steveire.com/boost/'>http://www.steveire.com/boost/</a></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>2013/10/17時点のBoost全体の依存関係</h3>
+        <span class='smaller vcentered'>
+          <img src='http://www.steveire.com/boost/graph_final_small.png' style='width: 95%' />
+          <a href='http://www.steveire.com/boost/graph_final_small.png'>http://www.steveire.com/boost/graph_final_small.png</a>より
+        </span>
+      </article>
+
+      <article>
+        <h3>2014/06/08時点のBoost全体の依存関係</h3>
+        <span class='smaller vcentered'>
+          <img src='http://www.steveire.com/boost/2014_june8_all.png' style='width: 90%' />
+          <a href='http://www.steveire.com/boost/2014_june8_all.png'>http://www.steveire.com/boost/2014_june8_all.png</a>より
+        </span>
+      </article>
+
+      <article>
+        <h2>後半：これからのBoostの開発への参加</h2>
       </article>
 
       <article>
