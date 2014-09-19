@@ -116,8 +116,8 @@
         <h3>今回振り返るバージョン</h3>
         <div style='float: left; width: 40%'>
           <ul>
-            <li>Boost 1.41 - <span style='color: red'>RHEL 6</span></li>
-            <li>Boost 1.42 - <span style='color: red'>Debian 6</span></li>
+            <li>Boost 1.41 - <span class='red'>RHEL 6</span></li>
+            <li>Boost 1.42 - <span class='red'>Debian 6</span></li>
             <li>Boost 1.43</li>
             <li>Boost 1.44</li>
             <li>Boost 1.45</li>
@@ -128,13 +128,13 @@
         </div>
         <div style='float: left; width: 60%'>
           <ul>
-            <li>Boost 1.49 - <span style='color: red'>Debian 7 Ubuntu 13.04</span></li>
+            <li>Boost 1.49 - <span class='red'>Debian 7 Ubuntu 13.04</span></li>
             <li>Boost 1.50</li>
             <li>Boost 1.51</li>
             <li>Boost 1.52</li>
-            <li>Boost 1.53 - <span style='color: red'>RHEL 7 Ubuntu 13.04/13.10</span></li>
-            <li>Boost 1.54 - <span style='color: red'>Ubuntu 14.04</span></li>
-            <li>Boost 1.55 - <span style='color: red'>Ubuntu 14.04</span></li>
+            <li>Boost 1.53 - <span class='red'>RHEL 7 Ubuntu 13.04/13.10</span></li>
+            <li>Boost 1.54 - <span class='red'>Ubuntu 14.04</span></li>
+            <li>Boost 1.55 - <span class='red'>Ubuntu 14.04</span></li>
             <li>Boost 1.56</li>
           </ul>
         </div>
@@ -483,7 +483,7 @@ int main()
           <ul>
             <li>例外としてConfigやPredef、PP等への依存は容認</li>
           </ul></li>
-          <li><b>"ユーザが便利に使うためのライブラリ"<span style='color: red'>ではない</span></b></li>
+          <li><b>"ユーザが便利に使うためのライブラリ"<span class='red'>ではない</span></b></li>
           <li>それまで各ライブラリが独自に(detail空間に)実装していた細かいユーティリティ等が集約された
           <ul>
             <li>便利に思った他のライブラリのメンテナそこを参照してしまうのが複雑な依存関係の現況</li>
@@ -516,6 +516,103 @@ int main()
           <img src='http://www.steveire.com/boost/2014_june8_all.png' style='width: 90%' />
           <a href='http://www.steveire.com/boost/2014_june8_all.png'>http://www.steveire.com/boost/2014_june8_all.png</a>より
         </span>
+      </article>
+
+      <article>
+        <h3>意外と便利かもしれないBoost.Core</h3>
+        <ul>
+          <li><a href='http://www.boost.org/libs/core/'>http://www.boost.org/libs/core/</a></li>
+          <li>様々なdetail空間にあったユーティリティをまとめたモジュール</li>
+          <li>既に良く知られたutilityは割愛
+          <div>
+            <span style='float: left; width: 40%'>
+              <ul>
+                <li>addressof</li>
+                <li>checked_delete</li>
+                <li>enable_if</li>
+                <li>explicit_operator_bool</li>
+                <li>is_same</li>
+              </ul>
+            </span>
+            <span style='float: left; width: 40%'>
+              <ul>
+                <li>noncopyable</li>
+                <li>null_deleter</li>
+                <li>ref</li>
+                <li>swap</li>
+              </ul>
+            </span>
+          </div></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>demangle / typeinfo</h3>
+        <ul>
+          <li>RTTIを支援するユーティリティ</li>
+        </ul>
+        <pre class='prettyprint lang-cpp'>
+#include &lt;boost/core/typeinfo.hpp&gt;
+#include &lt;boost/core/demangle.hpp&gt;
+
+template &lt;typename T&gt;
+inline void show_type()
+{
+    const boost::core::typeinfo &amp;info = <span class='red'>BOOST_CORE_TYPEID</span>( T );
+    const char * name = info.name();
+    std::cout &lt;&lt; <span class='red'>boost::core::demangle</span>( name ) &lt;&lt; std::endl;
+}
+
+show_type&lt;std::vector&lt;int&gt;&gt;();
+//=&gt; -frtti
+//   std::vector&lt;int, std::allocator&lt;int&gt; &gt;
+//=&gt; -fno-rtti
+//   static const char* boost::detail::core_typeid_&lt;T&gt;::name()
+//   [with T = std::vector&lt;int&gt;]
+        </pre>
+      </article>
+
+      <!--
+      <article>
+        <h3>explicit_operator_bool</h3>
+        <ul>
+          <li>C++11のexplict conversion operators用のラッパ</li>
+          <li>C++03ではsafe bool idiomに置き換える</li>
+        </ul>
+        <pre class='prettyprint lang-cpp'>
+#include &lt;boost/core/explicit_operator_bool.hpp&gt;
+
+struct Obj
+{
+    <span class='red'>BOOST_EXPLICIT_OPERATOR_BOOL()</span>
+
+    bool operator!() const BOOST_NOEXCEPT; // ! を元にboolへの変換を行うので必要
+};
+
+bool f(Obj x)
+{
+    if (x) ; // well-defined
+    if (x + 0) ; // ill-formed
+    return x; // C++03では残念ながら通ってしまう
+}</pre>
+      </article>
+      -->
+
+      <article>
+        <h3>ignore_unused</h3>
+        <ul>
+          <li>少し警告レベルを上げるだけで大量に出てくるunused warningを抑制</li>
+          <li>変数にもunused local typedefにも使える</li>
+        </ul>
+        <pre class='prettyprint lang-cpp'>
+#include &lt;boost/core/ignore_unused.hpp&gt;
+
+void foo( int hoge )
+{
+    typedef int type;
+    <span class='red'>boost::ignore_unused</span>( hoge );
+    <span class='red'>boost::ignore_unused&lt; type &gt;</span>();
+}</pre>
       </article>
 
       <article>
