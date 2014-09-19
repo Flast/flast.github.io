@@ -292,13 +292,18 @@
       <article>
         <h3>Boost.ContextとBoost.Coroutine</h3>
         <ul>
-          <li>Oliver曰く、ContextはCSに8ns、Coroutineは10nsかかる、らしい
+          <li>どちらもOliver Kowalkeが作者</li>
+          <li>だいたいリリースノートに乗らない破壊<del>的変更</del>を行う</li>
+          <li>名前空間は変わる、クラスはなくなる、すべてが変わる</li>
+          <li>移行期間？そういう、甘ったれた考えは捨てたほうが良い</li>
+          <li>CS速度が気になるのであれば、Oliver曰く、ContextはCSに8ns、Coroutineは10nsかかる、らしい
           <ul>
-            <li>ref. <a href='http://lists.boost.org/boost-users/2014/09/82912.php'>http://lists.boost.org/boost-users/2014/09/82912.php</a></li>
+            <li><a href='http://lists.boost.org/boost-users/2014/09/82912.php'>http://lists.boost.org/boost-users/2014/09/82912.php</a></li>
           </ul></li>
         </ul>
       </article>
 
+      <!--
       <article>
         <h3>Boost.Multiprecision</h3>
       </article>
@@ -306,6 +311,7 @@
       <article>
         <h3>Boost.Numeric/ODEInt</h3>
       </article>
+      -->
 
       <article>
         <h3>Boost 1.54</h3>
@@ -323,6 +329,13 @@
           </ul></li>
         </ul>
       </article>
+
+      <!--
+      <article>
+        <h3>Boost.TTI</h3>
+        TODO...
+      </article>
+      -->
 
       <article>
         <h3>Boost 1.55</h3>
@@ -345,11 +358,13 @@
         </ul>
       </article>
 
+      <!--
       <article>
         <h3>VC++ 7.0が切られた！</h3>
         <ul>
         </ul>
       </article>
+      -->
 
       <article>
         <h3>Boost.Predef</h3>
@@ -529,16 +544,21 @@ int main()
               <ul>
                 <li>addressof</li>
                 <li>checked_delete</li>
+                <li><span class='red'>demangle / typeinfo</span></li>
                 <li>enable_if</li>
-                <li>explicit_operator_bool</li>
+                <li><span class='red'>explicit_operator_bool</span></li>
+                <li><span class='red'>ignore_unused</span></li>
                 <li>is_same</li>
               </ul>
             </span>
             <span style='float: left; width: 40%'>
               <ul>
+                <li><span class='red'>lightweight_test</span></li>
+                <li>no_exceptions_support</li>
                 <li>noncopyable</li>
                 <li>null_deleter</li>
                 <li>ref</li>
+                <li>scoped_enum</li>
                 <li>swap</li>
               </ul>
             </span>
@@ -559,7 +579,7 @@ template &lt;typename T&gt;
 inline void show_type()
 {
     const boost::core::typeinfo &amp;info = <span class='red'>BOOST_CORE_TYPEID</span>( T );
-    const char * name = info.name();
+    const char *name = info.name();
     std::cout &lt;&lt; <span class='red'>boost::core::demangle</span>( name ) &lt;&lt; std::endl;
 }
 
@@ -572,7 +592,6 @@ show_type&lt;std::vector&lt;int&gt;&gt;();
         </pre>
       </article>
 
-      <!--
       <article>
         <h3>explicit_operator_bool</h3>
         <ul>
@@ -596,7 +615,6 @@ bool f(Obj x)
     return x; // C++03では残念ながら通ってしまう
 }</pre>
       </article>
-      -->
 
       <article>
         <h3>ignore_unused</h3>
@@ -610,9 +628,31 @@ bool f(Obj x)
 void foo( int hoge )
 {
     typedef int type;
-    <span class='red'>boost::ignore_unused</span>( hoge );
-    <span class='red'>boost::ignore_unused&lt; type &gt;</span>();
+    <span class='red'>boost::ignore_unused</span>(hoge);
+    <span class='red'>boost::ignore_unused</span>&lt;type&gt;();
 }</pre>
+      </article>
+
+      <article>
+        <h3>lightweight_test</h3>
+        <ul>
+          <li>regressionとかで様々なライブラリから使われているのでBoost.Testから切り離された</li>
+        </ul>
+        <pre class='prettyprint lang-cpp'>
+#include &lt;boost/core/lightweight_test.hpp&gt;
+
+int main()
+{
+    <span class='red'>BOOST_TEST</span>( false );
+    <span class='red'>BOOST_TEST_THROWS</span>( throw 0, float );
+    return <span class='red'>boost::report_errors</span>(); // 必須
+}
+
+// stderr
+// ----
+// lwt.cpp(5): test 'false' failed in function 'int main()'
+// lwt.cpp(6): Exception 'float' not thrown in function 'int main()'
+// 2 errors detected. </pre>
       </article>
 
       <article>
@@ -633,7 +673,7 @@ void foo( int hoge )
             <li>super projectからsubmoduleを使って参照している</li>
             <li>ヘッダとかも全部それぞれのリポジトリに置かれる
             <ul>
-              <li>Boost.Buildでsymlinkを張る（後述）</li>
+              <li>Boost.Buildが必要に応じてsymlinkを張る（後述）</li>
             </ul></li>
           </ul></li>
         </ul>
@@ -655,13 +695,52 @@ boost$ ./b2 install</pre></li>
           <li>更新
           <pre>
 boost$ git pull
-boost$ git submodule update
+boost$ git submodule update --init
 boost$ ./b2 headers</pre></li>
         </ol>
       </article>
 
       <article>
-        <h3>情報源</h3>
+        <h3>project-config.jam</h3>
+        <ul>
+          <li>user-config / site-config 以外にも、プロジェクト単位でconfigを書ける</li>
+          <li>bootstrap.shが雛形をつくってくれるのでそれを元に編集</li>
+          <li>例えば、signals,mpi,pythonはビルドせず、`/usr`にインストールしたい
+          <ul>
+            <li>毎回コマンドラインにオプションを書く必要がある<pre>
+$ b2 <span class='blue'>--without-signals --without-mpi --prefix=/home/flast/local</span> install</pre></li>
+            <li class='build'><span>が、これはproject-config.jamにこう書ける<pre>
+libraries = <span class='blue'>--without-signals --without-mpi</span> ;
+
+option.set prefix : <span class='blue'>/home/flast/local</span> ;
+option.set exec-prefix : <span class='blue'>/home/flast/local</span> ;
+option.set libdir : <span class='blue'>/home/flast/local/lib</span> ;
+option.set includedir : <span class='blue'>/home/flast/local/include</span> ;</pre></span></li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>テスト</h3>
+        <ul>
+          <li>statusディレクトリ下でb2を実行するとboost全体のテストが走る</li>
+          <li>テストが多すぎてb2だけで1GB&lt;メモリを消費する</li>
+          <li>特定のライブラリだけテストしたい場合
+          <ol>
+            <li>いくつかのライブラリをテストしたい場合<pre>
+$ cd status
+$ b2 --limit-test=fusion --limit-tests=asio</pre></li>
+            <li>特定のライブラリの特定のテストを実行したい場合<pre>
+$ cd libs/fusion/test
+$ ls <span class='blue'>compile_time/fold</span>.cpp
+compile_time/fold.cpp
+$ b2 <span class='blue'>fold</span></pre></li>
+          </ol></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>参加する：情報源</h3>
         <ul>
           <li>MLを購読する
           <ul>
@@ -684,7 +763,7 @@ boost$ ./b2 headers</pre></li>
       </article>
 
       <article>
-        <h3>情報源</h3>
+        <h3>参加する：情報源</h3>
         <ul>
           <li>Stack Overflowを見る
           <ul>
@@ -720,11 +799,11 @@ boost$ ./b2 headers</pre></li>
       </article>
 
       <article>
-        <h3></h3>
+        <h3>参加する：バグレポ・パッチ</h3>
       </article>
 
       <article>
-        <h3></h3>
+        <h3>開発する：新しいライブラリを作る</h3>
       </article>
 
       <article>
