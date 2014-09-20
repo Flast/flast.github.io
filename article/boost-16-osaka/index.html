@@ -303,16 +303,6 @@
         </ul>
       </article>
 
-      <!--
-      <article>
-        <h3>Boost.Multiprecision</h3>
-      </article>
-
-      <article>
-        <h3>Boost.Numeric/ODEInt</h3>
-      </article>
-      -->
-
       <article>
         <h3>Boost 1.54</h3>
         <ul>
@@ -329,13 +319,6 @@
           </ul></li>
         </ul>
       </article>
-
-      <!--
-      <article>
-        <h3>Boost.TTI</h3>
-        TODO...
-      </article>
-      -->
 
       <article>
         <h3>Boost 1.55</h3>
@@ -357,14 +340,6 @@
           </ul></li>
         </ul>
       </article>
-
-      <!--
-      <article>
-        <h3>VC++ 7.0が切られた！</h3>
-        <ul>
-        </ul>
-      </article>
-      -->
 
       <article>
         <h3>Boost.Predef</h3>
@@ -705,7 +680,7 @@ boost$ ./b2 headers</pre></li>
         <ul>
           <li>user-config / site-config 以外にも、プロジェクト単位でconfigを書ける</li>
           <li>bootstrap.shが雛形をつくってくれるのでそれを元に編集</li>
-          <li>例えば、signals,mpi,pythonはビルドせず、`/usr`にインストールしたい
+          <li>例えば、signals,mpiはビルドせず、`/home/flast/local`にインストールしたい
           <ul>
             <li>毎回コマンドラインにオプションを書く必要がある<pre>
 $ b2 <span class='blue'>--without-signals --without-mpi --prefix=/home/flast/local</span> install</pre></li>
