@@ -662,7 +662,7 @@ int main()
       <article>
         <h3>はじめに：githubに移ってからのリポジトリ</h3>
         <ul>
-          <li>今年4月頃以降、<a href='http://svn.boost.org/'>svn.boost.org</a>のsvnリポジトリは使われなくなった</li>
+          <li>今年4月頃以降、<a href='https://svn.boost.org/'>svn.boost.org</a>のsvnリポジトリは使われなくなった</li>
           <li>現在はgithub上に置かれている
           <ul>
             <li><a href='https://github.com/boostorg'>github.com/boostorg</a></li>
@@ -729,7 +729,7 @@ option.set includedir : <span class='blue'>/home/flast/local/include</span> ;</p
           <ol>
             <li>いくつかのライブラリをテストしたい場合<pre>
 $ cd status
-$ b2 --limit-test=fusion --limit-tests=asio</pre></li>
+$ b2 --limit-tests=fusion --limit-tests=asio</pre></li>
             <li>特定のライブラリの特定のテストを実行したい場合<pre>
 $ cd libs/fusion/test
 $ ls <span class='blue'>compile_time/fold</span>.cpp
@@ -745,8 +745,8 @@ $ b2 <span class='blue'>fold</span></pre></li>
           <li>MLを購読する
           <ul>
             <li><a href='http://www.boost.org/community/groups.html'>www.boost.org/community/groups.html</a></li>
-            <li>Developers：開発全般に関連するML</li>
-            <li>Users：使い方とかの質問するML</li>
+            <li><a href='http://lists.boost.org/mailman/listinfo.cgi/boost'>Developers</a>：開発全般に関連するML</li>
+            <li><a href='http://lists.boost.org/mailman/listinfo.cgi/boost-users'>Users</a>：使い方とかの質問するML</li>
           </ul></li>
           <li>wikiを見る
           <ul>
@@ -800,10 +800,79 @@ $ b2 <span class='blue'>fold</span></pre></li>
 
       <article>
         <h3>参加する：バグレポ・パッチ</h3>
+        <ul>
+          <li>リポジトリはgithubに移ったが、バグレポは継続して<a href='https://svn.boost.org/trac/boost'>svn.boost.org</a>に投げる
+          <ul>
+            <li>github上のissuesはリンク自体消えている</li>
+          </ul></li>
+          <li>パッチは<a href='https://svn.boost.org/trac/boost'>svn.boost.org</a>に送るより、github上でpull-requestをしたほうが良い</li>
+          <li>開発に使われるブランチは2つ
+          <ul>
+            <li>master: 次のリリース時に使用するブランチ</li>
+            <li>develop: アクティブな開発に使うブランチ</li>
+          </ul></li>
+          <li>通常はdevelopにpull-requestを投げる</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>参加する：バグレポ・パッチ</h3>
+        <ul>
+          <li>ライブラリのメンテナによって、反応の度合いはとても変わる
+          <ul>
+            <li><a href='https://svn.boost.org/trac/boost'>svn.boost.org</a>に書いても、pull-request投げても反応が無いメンテナがいる</li>
+            <li>とっとと取り込んでもらい場合には<a href='http://lists.boost.org/mailman/listinfo.cgi/boost'>Developers ML</a>に投げるのがよい</li>
+          </ul></li>
+          <li>一部のライブラリはメンテナが<del>失踪</del>不在しており、その場合には<a href='https://svn.boost.org/trac/boost/wiki/CommunityMaintenance'>Boost.CMT</a>がメンテナンスを行う</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>参加する：Boost.CMT</h3>
+        <ul>
+          <li>Boost.CMTへの参加はMLを購読するだけ</li>
+          <li>Boost.CMT自体にはコミット権等は無い</li>
+          <li>パッチに対してテストのリクエストとか流れたらそれを見て結果を報告、review</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>CI (継続的インテグレーション)</h3>
+        <ul>
+          <li>モダンなCI
+          <ul>
+            <li>Jenkins CI, Travis CI, GitLab CI, ...</li>
+          </ul><span class='build'><span>は</span></span><span class='build'><b class='red'>無い</b></span></li>
+          <li class='build'><a href='http://www.boost.org/development/tests/master/developer/summary.html'>master</a></li>
+          <li class='build'><a href='http://www.boost.org/development/tests/develop/developer/summary.html'>develop</a></li>
+        </ul>
       </article>
 
       <article>
         <h3>開発する：新しいライブラリを作る</h3>
+        <ul>
+          <li>ディレクトリ構造を規定のものにして、libsの下に置いてやるとBoost.Buildが勝手にビルドしてくれる
+          <ul>
+            <li>doc : quickbookのドキュメント</li>
+            <li>doc/html : quickbookをビルドして出来たhtml</li>
+            <li>include/boost : 各種ヘッダ</li>
+            <li>src : コンパイルするsoやa、dllがあれば (必須ではない)</li>
+            <li>meta : JSON形式のメタデータ (必須ではない)</li>
+            <li>test : テスト</li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>開発する：新しいライブラリをreviewにだす</h3>
+        <ol>
+          <li>詳細な手順 <a href='http://www.boost.org/community/reviews.html'>www.boost.org/community/reviews.html</a></li>
+          <li>Developers MLにproposalを出す</li>
+          <li><a href='http://www.boost.org/community/review_schedule.html'>スケジュール</a>にのる</li>
+          <li>Review Managerがつくのを待つ (長い！！！！)</li>
+          <li>Reviewが始まる</li>
+          <li>採否</li>
+        </ol>
       </article>
 
       <article>
