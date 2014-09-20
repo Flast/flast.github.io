@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+
+<!--
+  Boost.勉強会#16 大阪
+
+  Author: Kohei Takahashi
+
+  URL: http://www.flast.jp/article/boost-16-sapporo/
+-->
+
+<html lang="ja">
+  <head>
+    <title>便利！電動歯ブラシ | Boost.勉強会 #16 大阪</title>
+
+    <meta charset='utf-8' />
+    <meta name='author' content='Kohei Takahashi' />
+    <meta name='viewport' content='width=1100,height=750' />
+    <meta name='apple-mobile-web-app-capable' content='yes' />
+
+    <script src='slides.js'></script>
+    <script src='prettify.js'></script>
+    <script>
+      window.onload = prettyPrint;
+    </script>
+
+    <link rel='stylesheet' type='text/css' href='styles.css' />
+    <link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|Droid+Sans+Mono' />
+  </head>
+
+  <style>
+    table.centered { margin: 0px auto }
+    table.narrow { width: 80% }
+    table.smaller { font-size: 22px }
+
+    img.fitting { width: 80% }
+  </style>
+
+  <body style='display: none'>
+
+    <section class="slides layout-widescreen template-boost">
+
+      <article>
+        <h1>便利！電動歯ブラシ</h1>
+        <p>
+          Kohei Takahashi
+          <br />
+          Sep 20, 2014
+        </p>
+      </article>
+
+      <article>
+        <h2>Who am I</h2>
+      </article>
+
+      <article>
+        <h3>Who am I</h3>
+        <ul>
+          <li>Twitter: <a href="https://twitter.com/Flast_RO">@Flast_RO</a> / <a href="https://wtiter.com/Flast_NET">@Flast_NET</a></li>
+          <li><a href="http://ftp.tsukuba.wide.ad.jp/">http://ftp.tsukuba.wide.ad.jp/</a></li>
+          <li><a href="http://www.ihanet.info/">IHANet</a> AS64623</li>
+          <li>職業: Cryoliteの敵<img class="centered" src='http://gyazo.flast.jp/e25fa07d4509f71e2af77e8a4c26d8f0.png' />
+          </li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Boost.勉強会 #16 大阪の開催が決定した頃...</h3>
+        <p>なんか飛んできた</p>
+        <blockquote class="twitter-tweet" data-conversation="none" lang="en"><p><a href="https://twitter.com/Flast_RO">@Flast_RO</a> Boostの今！みたいなネタはどうでしょうかー（（個人的に自分が聞きたい…</p>&mdash; 遥佐保 (@hr_sao) <a href="https://twitter.com/hr_sao/status/497316312301830144">August 7, 2014</a></blockquote>
+        <span class="build"><p>ので</p></span>
+      </article>
+
+      <article>
+        <h3>このセッションは</h3>
+        <p>
+        次期標準だったり、プリプロセッサのようなよくわからない話ではなく
+        <ul>
+          <li>Boostの今を知るために、各バージョンでどういう進化をしてきたのか</li>
+          <li><del>これからのBoostにはどんなものが提案されているのか</del>
+          <ul class='smaller'>
+            <li>ここまで調べてる時間が無かったので割愛</li>
+          </ul></li>
+          <li>これからBoostの開発に関わっていくにはどうしたらいいのか</li>
+        </ul>
+        を軽い感じで話していきます
+      </p>
+      </article>
+
+      <article>
+        <h3>Boostの歴史を振りつつ、</h3>
+        <ul>
+          <li>9ヶ月経ってやっとBoost 1.56.0がリリースされた</li>
+          <li>RHEL7、CentOS7がリリースされた</li>
+          <li>Debian stableもやっと7になった</li>
+          <li>過去を振り返りつつ、各バージョンで出来ること出来ないことを再確認</li>
+          <li>もとよりC++使えない？しらんがな</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>開発に関わっていこう</h3>
+        <ul>
+          <li>リポジトリはどこに？</li>
+          <li>どこで質問したり、議論に参加できる？</li>
+          <li>バグ報告はどこですればいい？</li>
+          <li>パッチはどう送ったらいい？</li>
+          <li>新しいライブラリを作りたい</li>
+        </ul>
+      </article>
+
+      <article>
+        <h2>前半：これまで〜最近のBoost</h2>
+      </article>
+
+      <article>
+        <h3>今回振り返るバージョン</h3>
+        <div style='float: left; width: 40%'>
+          <ul>
+            <li>Boost 1.41 - <span class='red'>RHEL 6</span></li>
+            <li>Boost 1.42 - <span class='red'>Debian 6</span></li>
+            <li>Boost 1.43</li>
+            <li>Boost 1.44</li>
+            <li>Boost 1.45</li>
+            <li>Boost 1.46</li>
+            <li>Boost 1.47</li>
+            <li>Boost 1.48</li>
+          </ul>
+        </div>
+        <div style='float: left; width: 60%'>
+          <ul>
+            <li>Boost 1.49 - <span class='red'>Debian 7 Ubuntu 13.04</span></li>
+            <li>Boost 1.50</li>
+            <li>Boost 1.51</li>
+            <li>Boost 1.52</li>
+            <li>Boost 1.53 - <span class='red'>RHEL 7 Ubuntu 13.04/13.10</span></li>
+            <li>Boost 1.54 - <span class='red'>Ubuntu 14.04</span></li>
+            <li>Boost 1.55 - <span class='red'>Ubuntu 14.04</span></li>
+            <li>Boost 1.56</li>
+          </ul>
+        </div>
+        <div style='float: none; width: 70%'>
+          <p>1.41 - 1.53までの間は軽い感じで飛ばしていきます</p>
+        </div>
+      </article>
+
+      <article>
+        <h3>Boost 1.41 - 1.43</h3>
+        <ul>
+          <li>1.41.0: 2009/11/17 リリース
+          <ul>
+            <li><a href='http://www.boost.org/doc/libs/1_41_0/libs/property_tree'>PropertyTree</a>：XMLとかJSONとか扱うライブラリ</li>
+          </ul></li>
+          <li>1.42.0: 2010/2/2 リリース
+          <ul>
+            <li><a href='http://www.boost.org/doc/libs/1_42_0/libs/uuid'>UUID</a>：UUIDを扱うライブラリ</li>
+          </ul></li>
+          <li>1.43.0: 2010/5/6 リリース
+          <ul>
+            <li><a href='http://www.boost.org/doc/libs/1_43_0/libs/functional/factory'>Functional/Factory</a>：ctorやnew演算子を関数オブジェクト化するラッパ</li>
+            <li><a href='http://www.boost.org/doc/libs/1_43_0/libs/functional/forward'>Functional/Forward</a>：rvalueをconst lv-refに変換して関数を呼ぶラッパ
+            <ul>
+              <li>C++11が使える環境であればrv-refを素直に使ったほうが良い</li>
+            </ul></li>
+            <li><a href='http://www.boost.org/doc/libs/1_43_0/libs/range'>Range 2.0</a>：今のよく知られたレンジライブラリへ刷新</li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Boost 1.44 - 1.46.1</h3>
+        <ul>
+          <li>1.44.0: 2010/8/13 リリース
+          <ul>
+            <li><a href='http://www.boost.org/doc/libs/1_44_0/libs/msm'>MSM</a>：状態マシンを記述する為のライブラリ</li>
+            <li><a href='http://www.boost.org/doc/libs/1_44_0/libs/polygon'>Polygon</a>：ポリゴンを扱うライブラリ</li>
+          </ul></li>
+          <li>1.45.0: 2010/11/19 リリース</li>
+          <li>1.46.0: 2011/2/21 リリース</li>
+          <ul>
+            <li>1.46.1: 2011/3/12 リリース</li>
+            <li><a href='http://www.boost.org/doc/libs/1_46_1/libs/icl'>ICL</a>：区間を扱うライブラリ</li>
+          </ul>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Boost 1.47</h3>
+        <ul>
+          <li>2011/7/11 リリース</li>
+          <li>新ライブラリ
+          <ul>
+            <li><a href='http://www.boost.org/doc/libs/1_47_0/libs/chrono'>Chrono</a>：C++11のstd::chrono相当</li>
+            <li><a href='http://www.boost.org/doc/libs/1_47_0/libs/geometry'>Geometry</a>：幾何を扱うライブラリ</li>
+            <li><a href='http://www.boost.org/doc/libs/1_47_0/libs/phoenix'>Phoenix</a>：Boost.Lambda的なDSL</li>
+            <li><a href='http://www.boost.org/doc/libs/1_47_0/libs/ratio'>Ratio</a>：C++11のstd::ratio相当</li>
+          </ul></li>
+          <li>大体このバージョン付近から、C++11で標準化されたライブラリをC++03でも使える様に代替実装を用意し始めた</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Boost 1.48</h3>
+        <ul>
+          <li>2011/11/15 リリース</li>
+          <li>新ライブラリ
+          <ul>
+            <li><a href='http://www.boost.org/doc/libs/1_48_0/libs/container'>Container</a>：C++11のSTLコンテナ互換ライブラリ</li>
+            <li><a href='http://www.boost.org/doc/libs/1_48_0/libs/locale'>Locale</a>：ローカライゼーションライブラリ</li>
+            <li><a href='http://www.boost.org/doc/libs/1_48_0/libs/move'>Move</a>：C++11のmove semanticsをエミュレートするライブラリ</li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Boost 1.49</h3>
+        <ul>
+          <li>2012/2/24 リリース</li>
+          <li>新ライブラリ
+          <ul>
+            <li><a href='http://www.boost.org/doc/libs/1_49_0/libs/heap'>Heap</a>：std::priority_queueのバリエーション</li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Boost 1.50</h3>
+        <ul>
+          <li>2012/6/28 リリース</li>
+          <li>新ライブラリ
+          <ul>
+            <li><a href='http://www.boost.org/doc/libs/1_50_0/libs/algorithm'>Algorithm</a>：C++11で追加されたアルゴリズムC++03版とか</li>
+            <li><a href='http://www.boost.org/doc/libs/1_50_0/libs/functional/overloaded_function'>Functional/OverloadedFunction</a>：C11の_Genericsの様なライブラリ</li>
+            <li><a href='http://www.boost.org/doc/libs/1_50_0/libs/local_function'>LocalFunction</a>：GNU拡張のローカル関数みたいに書けるライブラリ</li>
+            <li><a href='http://www.boost.org/doc/libs/1_50_0/libs/utility/identity_type'>Utility/IdentityType</a>：マクロの中でも,を使えるようにするライブラリ</li>
+          </ul></li>
+          <li>新しいライブラリは昔ブログにまとめたのでそちらを
+          <ul>
+            <li><a href='http://flast.hateblo.jp/entry/2012/07/04/151104'>http://flast.hateblo.jp/entry/2012/07/04/151104</a></li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Boost 1.51</h3>
+        <ul>
+          <li>2012/8/20 リリース</li>
+          <li>新ライブラリ
+          <ul>
+            <li><a href='http://www.boost.org/doc/libs/1_51_0/libs/context'>Context</a>：コンテキストスイッチを行う低レベルライブラリ
+            <ul>
+              <li>直接は使わないのが吉(1.53以降のCoroutineを使ったほうが良い)</li>
+              <li>大体変わる</li>
+            </ul>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Boost 1.52</h3>
+        <ul>
+          <li>2012/11/5 リリース</li>
+          <li>新ライブラリ
+          <ul>
+            <li>なし</li>
+          </ul></li>
+          <li>boost::result_ofが、n3276 decltypeの可否でTR1実装かdecltype実装かが切り替わる
+          <ul>
+            <li>詳細は昔ブログにまとめたのでそちらを</li>
+            <li><a href='http://flast.hateblo.jp/entry/2012/11/30/045950'>http://flast.hateblo.jp/entry/2012/11/30/045950</a></li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Boost 1.53</h3>
+        <ul>
+          <li>2013/2/4 リリース</li>
+          <li>新ライブラリ
+          <ul>
+            <li><a href='http://www.boost.org/doc/libs/1_53_0/libs/atomic'>Atomic</a>：C++11のstd::atomicをエミュレートしたライブラリ</li>
+            <li><a href='http://www.boost.org/doc/libs/1_53_0/libs/coroutine'>Coroutine</a>：Boost.Contextをベースにしたコルーチンライブラリ
+            <ul>
+              <li>1.56以降のCoroutineを使ったほうが良い</li>
+              <li>大体変わる</li>
+            </ul></li>
+            <li><a href='http://www.boost.org/doc/libs/1_53_0/libs/lockfree'>Lockfree</a>：ロックフリーコンテナのライブラリ</li>
+            <li><a href='http://www.boost.org/doc/libs/1_53_0/libs/multiprecision'>Multiprecision</a>：多倍長(整|(浮動|固定)少)数のライブラリ</li>
+            <li><a href='http://www.boost.org/doc/libs/1_53_0/libs/numeric/odeint'>Numeric/ODEInt</a>：常微分方程式を解くライブラリ</li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Boost.ContextとBoost.Coroutine</h3>
+        <ul>
+          <li>どちらもOliver Kowalkeが作者</li>
+          <li>だいたいリリースノートに乗らない破壊<del>的変更</del>を行う</li>
+          <li>名前空間は変わる、クラスはなくなる、すべてが変わる</li>
+          <li>移行期間？そういう、甘ったれた考えは捨てたほうが良い</li>
+          <li>CS速度が気になるのであれば、Oliver曰く、ContextはCSに8ns、Coroutineは10nsかかる、らしい
+          <ul>
+            <li><a href='http://lists.boost.org/boost-users/2014/09/82912.php'>http://lists.boost.org/boost-users/2014/09/82912.php</a></li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <!--
+      <article>
+        <h3>Boost.Multiprecision</h3>
+      </article>
+
+      <article>
+        <h3>Boost.Numeric/ODEInt</h3>
+      </article>
+      -->
+
+      <article>
+        <h3>Boost 1.54</h3>
+        <ul>
+          <li>2013/7/1 リリース</li>
+          <li>新ライブラリ
+          <ul>
+            <li><a href='http://www.boost.org/doc/libs/1_54_0/libs/log'>Log</a>：ロギングライブラリ</li>
+            <li><a href='http://www.boost.org/doc/libs/1_54_0/libs/tti'>TTI</a>：Type Traitsがコア言語周りのメタ関数を揃えている一方、TTIはクラス内部の情報を引っ張ってくるライブラリ</li>
+            <li><a href='http://www.boost.org/doc/libs/1_54_0/libs/type_erasure'>TypeErasure</a>：type erasureテクニックを行うためのライブラリ</li>
+          </ul></li>
+          <li>非推奨ライブラリ
+          <ul>
+            <li><a href='http://www.boost.org/doc/libs/1_54_0/libs/signals'>Signals</a>：Signals2をつかいましょう</li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <!--
+      <article>
+        <h3>Boost.TTI</h3>
+        TODO...
+      </article>
+      -->
+
+      <article>
+        <h3>Boost 1.55</h3>
+        <ul>
+          <li>2013/11/11 リリース</li>
+          <li>新ライブラリ
+          <ul>
+            <li><a href='http://www.boost.org/doc/libs/1_55_0/libs/predef'>Predef</a>：プラットフォーム、アーキテクチャとかコンパイラバージョンとか、正規化してくれるライブラリ
+            <ul>
+              <li>ConfigはBoost内部向けなので細かすぎてユーザは使いづらい</li>
+            </ul></li>
+          </ul></li>
+          <li>古すぎるコンパイラのサポートが切られた
+          <ul>
+            <li>Digital Mars &lt; 8.41</li>
+            <li>GCC &lt; 3.3</li>
+            <li>Intel &lt; 6.0</li>
+            <li>Visual C++ &lt; 7.1</li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <!--
+      <article>
+        <h3>VC++ 7.0が切られた！</h3>
+        <ul>
+        </ul>
+      </article>
+      -->
+
+      <article>
+        <h3>Boost.Predef</h3>
+        <ul>
+          <li>例えばコンパイラのバージョンをとったり
+        <pre class="prettyprint lang-cpp">
+#include &lt;boost/predef.h&gt;
+#include &lt;iostream&gt;
+
+int main()
+{
+    std::cout &lt;&lt;
+#if BOOST_COMP_GNUC &gt;= BOOST_VERSION_NUMBER(5,0,0)
+        "GCC 5.0 or later"
+#else
+        "GCC 4.x or earlier"
+#endif
+      &gt;&gt; std::endl;
+}</pre></li>
+      </article>
+
+      <article>
+        <h3>Boost.Predef</h3>
+        <ul>
+          <li>エンディアンとったりできる
+        <pre class="prettyprint lang-cpp">
+#include &lt;iostream&gt;
+#include &lt;tuple&gt;
+#include &lt;boost/predef.h&gt;
+int main()
+{
+    union {
+        unsigned short raw;
+        struct {
+#if defined(BOOST_ENDIAN_BIG_BYTE_AVAILABLE)
+            unsigned char high;
+            unsigned char low;
+#elif defined(BOOST_ENDIAN_LITTLE_BYTE_AVAILABLE)
+            unsigned char low;
+            unsigned char high;
+#endif
+        };
+    } x;
+    std::tie(x.high, x.low) = std::make_tuple(0x42u, 0x72u);
+    std::cout &lt;&lt; std::hex &lt;&lt; "0x" &lt;&lt; x.raw &lt;&lt; std::endl;
+}</pre></li>
+      </article>
+
+      <article>
+        <h3>Boost.Predef</h3>
+        <ul>
+          <li>主にバージョンの正規化関連が多い</li>
+          <li>長い間<del>見なかったことにしていた</del> 解決できていなかった<br />boost/detail/endian.hppのライセンス問題を解決</li>
+          <li>1.56時点で実装しているのは以下の通り
+          <ul>
+            <li>BOOST_ARCH_xxx: アーキテクチャ関連</li>
+            <li>BOOST_COMP_xxx: コンパイラ関連</li>
+            <li>BOOST_LANG_xxx: 言語関連</li>
+            <li>BOOST_LIB_xxx: C/C++の標準ライブラリ関連</li>
+            <li>BOOST_OS_xxx: OS種別関連</li>
+            <li>BOOST_PLAT_xxx: プラットフォーム(Winデスクトップ？Phone？)</li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Boost 1.56</h3>
+        <ul>
+          <li>2014/8/7 リリース
+          <ul>
+            <li>開発がgithubへ移行して最初のリリース</li>
+          </ul></li>
+          <li>当初のカレンダーだと5月上旬を予定していたのに余計なことして遅れに遅れた</li>
+          <li>新ライブラリ
+          <ul>
+            <li><a href='http://www.boost.org/doc/libs/1_56_0/libs/align/'>Align</a>：C++11で明文化されたアラインメント関連をC++03でも使えるようにするライブラリ</li>
+            <li><a href='http://www.boost.org/doc/libs/1_56_0/libs/type_index/'>TypeIndex</a>：C++11で追加されたtype_indexをエミュレーションするライブラリ</li>
+          </ul></li>
+          <li>非推奨ライブラリ
+          <ul>
+            <li><a href='http://www.boost.org/doc/libs/1_56_0/libs/tr1/'>TR1</a>：C++11が一般的になった、エミュレーションライブラリが揃ってきたので非推奨となった</li>
+          </ul>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Boost 1.56</h3>
+        <ul>
+          <li>新モジュール
+          <ul>
+            <li><a href='http://www.boost.org/doc/libs/1_56_0/libs/assert/'>Assert</a>：BOOST_ASSERTマクロ関連が特にどこにも属していなかったのでモジュールとして独立</li>
+            <li><a href='http://www.boost.org/doc/libs/1_56_0/libs/core/'>Core</a>：1.56リリース直前にライブラリ間の依存関係が話題になって新設（後述）</li>
+            <li><a href='http://www.boost.org/doc/libs/1_56_0/libs/lexical_cast/'>Lexical Cast</a>：もともとBoost.Conversionの一部だったけど何故か独立</li>
+            <li><a href='http://www.boost.org/doc/libs/1_56_0/libs/throw_exception/'>ThrowException</a>：Boost.ExceptionにあったBOOST_THROW_EXCEPTIONマクロがCoreと同じ理由で独立</li>
+            <li>Winapi：Boost内部でwindows.hをインクルードしないで良くするためのモジュール
+            <ul>
+              <li>Boost内部で使うので、ユーザが直接参照することはない</li>
+            </ul></li>
+          </ul>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Boostのモジュール化とBoost.Core</h3>
+        <ul>
+          <li>2013/10/17、1.55.0リリース直前にStephen Kellyが"Boostのモジュール化"を提案
+          <ul>
+            <li><a href='http://lists.boost.org/Archives/boost/2013/10/207384.php'>http://lists.boost.org/Archives/boost/2013/10/207384.php</a></li>
+            <li>githubへの移行でライブラリ毎にリポジトリが別れることになったきっかけ<span class='smaller'>...のはず</span></li>
+          </ul></li>
+          <li>2014/5/30にJulian Gonggrijpが再度"Boostのモジュール化"を提案
+          <ul>
+            <li><a href='http://lists.boost.org/Archives/boost/2014/05/213682.php'>http://lists.boost.org/Archives/boost/2014/05/213682.php</a></li>
+          </ul></li>
+          <li>2014/5/31にPeter DimovがBoost.Coreを提案
+          <ul>
+            <li><a href='http://lists.boost.org/Archives/boost/2014/05/213778.php'>http://lists.boost.org/Archives/boost/2014/05/213778.php</a></li>
+            <li>初期のメンテナはPeter Dimov, Glen Fernandes, Andrey Semashev</li>
+          </ul></li>
+          <li>2014/6/4にVicente J. Botet Escribaによってレベル分けも追って提案
+          <ul>
+            <li><a href='http://lists.boost.org/Archives/boost/2014/06/213945.php'>http://lists.boost.org/Archives/boost/2014/06/213945.php</a></li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Boostのモジュール化とBoost.Core</h3>
+        <ul>
+          <li>各ライブラリ間の複雑な依存関係を取り除く為に、他のライブラリから参照されるが、他のライブラリに依存しないモジュールを用意
+          <ul>
+            <li>例外としてConfigやPredef、PP等への依存は容認</li>
+          </ul></li>
+          <li><b>"ユーザが便利に使うためのライブラリ"<span class='red'>ではない</span></b></li>
+          <li>それまで各ライブラリが独自に(detail空間に)実装していた細かいユーティリティ等が集約された
+          <ul>
+            <li>便利に思った他のライブラリのメンテナそこを参照してしまうのが複雑な依存関係の現況</li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>どれぐらい複雑なのか</h3>
+        <ul>
+          <li>Stephen Kellyが自身のサーバにpngを置いてくれているのでそれを見てみるとわかる
+          <ul>
+            <li>同じ所にdot(Graphviz)も置いてくれているので、自前でpngを生成も出来る</li>
+          </ul></li>
+          <li><a href='http://www.steveire.com/boost/'>http://www.steveire.com/boost/</a></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>2013/10/17時点のBoost全体の依存関係</h3>
+        <span class='smaller vcentered'>
+          <img src='http://www.steveire.com/boost/graph_final_small.png' style='width: 95%' />
+          <a href='http://www.steveire.com/boost/graph_final_small.png'>http://www.steveire.com/boost/graph_final_small.png</a>より
+        </span>
+      </article>
+
+      <article>
+        <h3>2014/06/08時点のBoost全体の依存関係</h3>
+        <span class='smaller vcentered'>
+          <img src='http://www.steveire.com/boost/2014_june8_all.png' style='width: 90%' />
+          <a href='http://www.steveire.com/boost/2014_june8_all.png'>http://www.steveire.com/boost/2014_june8_all.png</a>より
+        </span>
+      </article>
+
+      <article>
+        <h3>意外と便利かもしれないBoost.Core</h3>
+        <ul>
+          <li><a href='http://www.boost.org/libs/core/'>http://www.boost.org/libs/core/</a></li>
+          <li>様々なdetail空間にあったユーティリティをまとめたモジュール</li>
+          <li>既に良く知られたutilityは割愛
+          <div>
+            <span style='float: left; width: 40%'>
+              <ul>
+                <li>addressof</li>
+                <li>checked_delete</li>
+                <li><span class='red'>demangle / typeinfo</span></li>
+                <li>enable_if</li>
+                <li><span class='red'>explicit_operator_bool</span></li>
+                <li><span class='red'>ignore_unused</span></li>
+                <li>is_same</li>
+              </ul>
+            </span>
+            <span style='float: left; width: 40%'>
+              <ul>
+                <li><span class='red'>lightweight_test</span></li>
+                <li>no_exceptions_support</li>
+                <li>noncopyable</li>
+                <li>null_deleter</li>
+                <li>ref</li>
+                <li>scoped_enum</li>
+                <li>swap</li>
+              </ul>
+            </span>
+          </div></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>demangle / typeinfo</h3>
+        <ul>
+          <li>RTTIを支援するユーティリティ</li>
+        </ul>
+        <pre class='prettyprint lang-cpp'>
+#include &lt;boost/core/typeinfo.hpp&gt;
+#include &lt;boost/core/demangle.hpp&gt;
+
+template &lt;typename T&gt;
+inline void show_type()
+{
+    const boost::core::typeinfo &amp;info = <span class='red'>BOOST_CORE_TYPEID</span>( T );
+    const char *name = info.name();
+    std::cout &lt;&lt; <span class='red'>boost::core::demangle</span>( name ) &lt;&lt; std::endl;
+}
+
+show_type&lt;std::vector&lt;int&gt;&gt;();
+//=&gt; -frtti
+//   std::vector&lt;int, std::allocator&lt;int&gt; &gt;
+//=&gt; -fno-rtti
+//   static const char* boost::detail::core_typeid_&lt;T&gt;::name()
+//   [with T = std::vector&lt;int&gt;]
+        </pre>
+      </article>
+
+      <article>
+        <h3>explicit_operator_bool</h3>
+        <ul>
+          <li>C++11のexplict conversion operators用のラッパ</li>
+          <li>C++03ではsafe bool idiomに置き換える</li>
+        </ul>
+        <pre class='prettyprint lang-cpp'>
+#include &lt;boost/core/explicit_operator_bool.hpp&gt;
+
+struct Obj
+{
+    <span class='red'>BOOST_EXPLICIT_OPERATOR_BOOL()</span>
+
+    bool operator!() const BOOST_NOEXCEPT; // ! を元にboolへの変換を行うので必要
+};
+
+bool f(Obj x)
+{
+    if (x) ; // well-defined
+    if (x + 0) ; // ill-formed
+    return x; // C++03では残念ながら通ってしまう
+}</pre>
+      </article>
+
+      <article>
+        <h3>ignore_unused</h3>
+        <ul>
+          <li>少し警告レベルを上げるだけで大量に出てくるunused warningを抑制</li>
+          <li>変数にもunused local typedefにも使える</li>
+        </ul>
+        <pre class='prettyprint lang-cpp'>
+#include &lt;boost/core/ignore_unused.hpp&gt;
+
+void foo( int hoge )
+{
+    typedef int type;
+    <span class='red'>boost::ignore_unused</span>(hoge);
+    <span class='red'>boost::ignore_unused</span>&lt;type&gt;();
+}</pre>
+      </article>
+
+      <article>
+        <h3>lightweight_test</h3>
+        <ul>
+          <li>regressionとかで様々なライブラリから使われているのでBoost.Testから切り離された</li>
+        </ul>
+        <pre class='prettyprint lang-cpp'>
+#include &lt;boost/core/lightweight_test.hpp&gt;
+
+int main()
+{
+    <span class='red'>BOOST_TEST</span>( false );
+    <span class='red'>BOOST_TEST_THROWS</span>( throw 0, float );
+    return <span class='red'>boost::report_errors</span>(); // 必須
+}
+
+// stderr
+// ----
+// lwt.cpp(5): test 'false' failed in function 'int main()'
+// lwt.cpp(6): Exception 'float' not thrown in function 'int main()'
+// 2 errors detected. </pre>
+      </article>
+
+      <article>
+        <h2>後半：これからのBoostの開発への参加</h2>
+      </article>
+
+      <article>
+        <h3>はじめに：githubに移ってからのリポジトリ</h3>
+        <ul>
+          <li>今年4月頃以降、<a href='https://svn.boost.org/'>svn.boost.org</a>のsvnリポジトリは使われなくなった</li>
+          <li>現在はgithub上に置かれている
+          <ul>
+            <li><a href='https://github.com/boostorg'>github.com/boostorg</a></li>
+            <li>https://github.com/boost-lib はもう使われない</li>
+          </ul></li>
+          <li>svnの時は単一のリポジトリにすべてのライブラリが入っていたが、githubになってから各ライブラリが個別のリポジトリになっている
+          <ul>
+            <li>super projectからsubmoduleを使って参照している</li>
+            <li>ヘッダとかも全部それぞれのリポジトリに置かれる
+            <ul>
+              <li>Boost.Buildが必要に応じてsymlinkを張る（後述）</li>
+            </ul></li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Boost開発ことはじめ</h3>
+        <ol>
+          <li>cloneしてくる：結構時間かかる
+          <pre>
+$ git clone --recursive -b develop https://github.com/boostorg/boost.git</pre></li>
+          <li>bootstrap、ビルド、インストール：結構時間かかる
+          <pre>
+$ cd boost
+boost$ ./bootstrap.sh
+boost$ ./b2 headers # ヘッダのsymlinkを張る
+boost$ ./b2
+boost$ ./b2 install</pre></li>
+          <li>更新
+          <pre>
+boost$ git pull
+boost$ git submodule update --init
+boost$ ./b2 headers</pre></li>
+        </ol>
+      </article>
+
+      <article>
+        <h3>project-config.jam</h3>
+        <ul>
+          <li>user-config / site-config 以外にも、プロジェクト単位でconfigを書ける</li>
+          <li>bootstrap.shが雛形をつくってくれるのでそれを元に編集</li>
+          <li>例えば、signals,mpi,pythonはビルドせず、`/usr`にインストールしたい
+          <ul>
+            <li>毎回コマンドラインにオプションを書く必要がある<pre>
+$ b2 <span class='blue'>--without-signals --without-mpi --prefix=/home/flast/local</span> install</pre></li>
+            <li class='build'><span>が、これはproject-config.jamにこう書ける<pre>
+libraries = <span class='blue'>--without-signals --without-mpi</span> ;
+
+option.set prefix : <span class='blue'>/home/flast/local</span> ;
+option.set exec-prefix : <span class='blue'>/home/flast/local</span> ;
+option.set libdir : <span class='blue'>/home/flast/local/lib</span> ;
+option.set includedir : <span class='blue'>/home/flast/local/include</span> ;</pre></span></li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>テスト</h3>
+        <ul>
+          <li>statusディレクトリ下でb2を実行するとboost全体のテストが走る</li>
+          <li>テストが多すぎてb2だけで1GB&lt;メモリを消費する</li>
+          <li>特定のライブラリだけテストしたい場合
+          <ol>
+            <li>いくつかのライブラリをテストしたい場合<pre>
+$ cd status
+$ b2 --limit-tests=fusion --limit-tests=asio</pre></li>
+            <li>特定のライブラリの特定のテストを実行したい場合<pre>
+$ cd libs/fusion/test
+$ ls <span class='blue'>compile_time/fold</span>.cpp
+compile_time/fold.cpp
+$ b2 <span class='blue'>fold</span></pre></li>
+          </ol></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>参加する：情報源</h3>
+        <ul>
+          <li>MLを購読する
+          <ul>
+            <li><a href='http://www.boost.org/community/groups.html'>www.boost.org/community/groups.html</a></li>
+            <li><a href='http://lists.boost.org/mailman/listinfo.cgi/boost'>Developers</a>：開発全般に関連するML</li>
+            <li><a href='http://lists.boost.org/mailman/listinfo.cgi/boost-users'>Users</a>：使い方とかの質問するML</li>
+          </ul></li>
+          <li>wikiを見る
+          <ul>
+            <li><a href='https://svn.boost.org/trac/boost'>svn.boost.org/trac/boost</a></li>
+            <li>あんまり更新はされないけど基本的なことは書いてある</li>
+          </ul></li>
+          <li>issueを見る
+          <ul>
+            <li><a href='https://svn.boost.org/trac/boost/report/14'>svn.boost.org/trac/boost/report/14</a></li>
+            <li>githubに移ってもissueはtracのを使う</li>
+            <li>14番のreportがライブラリ単位でまとまってて見やすい</li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>参加する：情報源</h3>
+        <ul>
+          <li>Stack Overflowを見る
+          <ul>
+            <li><a href='http://stackoverflow.com/questions/tagged/boost'>stackoverflow.com/questions/tagged/boost</a></li>
+            <li>私はあんまり見てないのでわからないが、Users MLよりはいろいろ質問されてる感じ</li>
+          </ul></li>
+          <li>ircでROMる
+          <ul>
+            <li>freenodeの#boostでも質問が投げられたりする</li>
+            <li>あんまり多くは無い（1日に2,3質問ぐらい）</li>
+            <li>リアルタイムにいんぐりっしゅで殴られて勉強になる</li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>ML投稿時の注意</h3>
+        <ul>
+          <li>どのライブラリのことなのかsubjectに書く
+          <ul>
+            <li><pre>[1.56][mpl][git] foo bar baz</pre></li>
+            <li>Boostは数多くのライブラリの集合体なので、どれのことなのか書いてないと判別しづらい</li>
+            <li>バージョン番号だったり、その他の事だったり、ライブラリ名だけとは限らない</li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>ML投稿時の注意</h3>
+        <ul>
+          <li><b>`top post`</b>はとても嫌われる</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>参加する：バグレポ・パッチ</h3>
+        <ul>
+          <li>リポジトリはgithubに移ったが、バグレポは継続して<a href='https://svn.boost.org/trac/boost'>svn.boost.org</a>に投げる
+          <ul>
+            <li>github上のissuesはリンク自体消えている</li>
+          </ul></li>
+          <li>パッチは<a href='https://svn.boost.org/trac/boost'>svn.boost.org</a>に送るより、github上でpull-requestをしたほうが良い</li>
+          <li>開発に使われるブランチは2つ
+          <ul>
+            <li>master: 次のリリース時に使用するブランチ</li>
+            <li>develop: アクティブな開発に使うブランチ</li>
+          </ul></li>
+          <li>通常はdevelopにpull-requestを投げる</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>参加する：バグレポ・パッチ</h3>
+        <ul>
+          <li>ライブラリのメンテナによって、反応の度合いはとても変わる
+          <ul>
+            <li><a href='https://svn.boost.org/trac/boost'>svn.boost.org</a>に書いても、pull-request投げても反応が無いメンテナがいる</li>
+            <li>とっとと取り込んでもらい場合には<a href='http://lists.boost.org/mailman/listinfo.cgi/boost'>Developers ML</a>に投げるのがよい</li>
+          </ul></li>
+          <li>一部のライブラリはメンテナが<del>失踪</del>不在しており、その場合には<a href='https://svn.boost.org/trac/boost/wiki/CommunityMaintenance'>Boost.CMT</a>がメンテナンスを行う</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>参加する：Boost.CMT</h3>
+        <ul>
+          <li>Boost.CMTへの参加はMLを購読するだけ</li>
+          <li>Boost.CMT自体にはコミット権等は無い</li>
+          <li>パッチに対してテストのリクエストとか流れたらそれを見て結果を報告、review</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>CI (継続的インテグレーション)</h3>
+        <ul>
+          <li>モダンなCI
+          <ul>
+            <li>Jenkins CI, Travis CI, GitLab CI, ...</li>
+          </ul><span class='build'><span>は</span></span><span class='build'><b class='red'>無い</b></span></li>
+          <li class='build'><a href='http://www.boost.org/development/tests/master/developer/summary.html'>master</a></li>
+          <li class='build'><a href='http://www.boost.org/development/tests/develop/developer/summary.html'>develop</a></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>開発する：新しいライブラリを作る</h3>
+        <ul>
+          <li>ディレクトリ構造を規定のものにして、libsの下に置いてやるとBoost.Buildが勝手にビルドしてくれる
+          <ul>
+            <li>doc : quickbookのドキュメント</li>
+            <li>doc/html : quickbookをビルドして出来たhtml</li>
+            <li>include/boost : 各種ヘッダ</li>
+            <li>src : コンパイルするsoやa、dllがあれば (必須ではない)</li>
+            <li>meta : JSON形式のメタデータ (必須ではない)</li>
+            <li>test : テスト</li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>開発する：新しいライブラリをreviewにだす</h3>
+        <ol>
+          <li>詳細な手順 <a href='http://www.boost.org/community/reviews.html'>www.boost.org/community/reviews.html</a></li>
+          <li>Developers MLにproposalを出す</li>
+          <li><a href='http://www.boost.org/community/review_schedule.html'>スケジュール</a>にのる</li>
+          <li>Review Managerがつくのを待つ (長い！！！！)</li>
+          <li>Reviewが始まる</li>
+          <li>採否</li>
+        </ol>
+      </article>
+
+      <article>
+        <h3>Question?</h3>
+      </article>
+
+    </section>
+
+  <!--
+  <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+  -->
+
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+  </body>
+</html>
