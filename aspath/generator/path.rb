@@ -5,81 +5,66 @@ require 'date'
 require 'json'
 require 'ruby-graphviz'
 
+require_relative './platform/cisco.rb'
+
 class ASpath < GraphViz
-  class Node
-    attr_reader :node
+  attr_reader :origin
 
-    def initialize(g, key)
-      @set = Set.new
-      @g = g
-      @node = @g.add_nodes key.to_s
-    end
-
-    def <<(node)
-      @g.add_edges(@node, @g[node].node) if @set.add? node
-      self
-    end
-
-    def [](key)
-      @node[key]
-    end
-    def []=(key, value)
-      @node[key] = value
-    end
+  def layout=(l)
+    super[:layout] = l
   end
 
-  attr_reader :origin
-  attr_accessor :info
-
-  def initialize(origin, layout)
+  def initialize(origin, info, layout)
     super :aspath, type: :digraph do |g|
       g.graph[:label] = "AS-path on AS#{origin} - #{DateTime.now}"
       g.graph[:center] = ""
       g.graph[:layout] = layout
     end
 
-    @origin = origin
-    @path = Hash.new {|h, k| h[k] = Node.new self, k}
-    @path[@origin][:peripheries] = 2
+    @origin = origin.to_s
+    @info = info
+    @path = Set.new
+    @nodes = Hash.new
+
+    label_node :self
+    @nodes[:self][:peripheries] = 2
   end
 
-  def update_info
-    @info.each do |k, v|
-      @path[k][:label] = k + '\n<' + v + '>' if @path.has_key? k
+
+  def <<(udag)
+    udag.each do |edge|
+      label_node edge.first
+      label_node edge.second
     end
+    udag.difference(@path).each do |edge|
+      add_edges @nodes[edge.first], @nodes[edge.second]
+    end
+    @path.merge udag
   end
 
-  def [](asn)
-    @path[asn]
-  end
+  private
 
-  def layout=(l)
-    super[:layout] = l
-  end
-end
+  def label_node(node)
+    return if @nodes.has_key? node
 
-path = ASpath.new ARGV[0], 'fdp'
-open("asinfo.json") do |io|
-  path.info = JSON.load(io)
-end
-
-def aspath?(path)
-  return unless path.length > 1
-  case path.last
-  when 'i','e','?'
-    true
+    asn = node == :self ? @origin : node
+    @nodes[node] = add_nodes(asn, label: asn + '\n<' + @info[asn] + '>')
   end
 end
 
-STDIN.each_line do |line|
-  l = line.split.drop 4
-  next unless aspath? l
-  l = l.reverse.drop(1).reverse
+path =
+open("asinfo.json") { |io| path = ASpath.new ARGV[0], JSON.load(io), 'fdp' }
 
-  path[path.origin] << l.first
-  l.each_cons(2) {|l, r| path[l] << r}
+routers =
+open(ARGV[1]) { |io| routers = JSON.load(io) }
+
+routers.each do |r|
+  p r
+  case r["vendor"]
+  when "cisco"
+    path << Platform::Cisco.paths(r["hostname"], r["user"], keys: r["keys"])
+  end
 end
 
-path.update_info
 path.output png: "as#{ARGV[0]}.png"
 path.output dot: "as#{ARGV[0]}.gv"
