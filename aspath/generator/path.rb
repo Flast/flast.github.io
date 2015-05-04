@@ -5,8 +5,6 @@ require 'date'
 require 'json'
 require 'ruby-graphviz'
 
-require_relative './platform/cisco.rb'
-
 class ASpath < GraphViz
   attr_reader :origin
 
@@ -59,9 +57,9 @@ routers =
 open(ARGV[1]) { |io| routers = JSON.load(io) }
 
 routers.each do |r|
-  p r
   case r["vendor"]
   when "cisco"
+    require_relative './platform/cisco.rb'
     path << Platform::Cisco.paths(r["hostname"], r["user"], keys: r["keys"])
   end
 end

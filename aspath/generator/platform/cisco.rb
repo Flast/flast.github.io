@@ -1,5 +1,5 @@
 require 'net/ssh'
-require_relative '../utility/pair.rb'
+require_relative '../utility/udag.rb'
 
 module Platform
   module Cisco
@@ -31,20 +31,15 @@ module Platform
         # ignore 'connection reset by peer'
       end
 
-      udag = Set.new # unique DAG
-
-      stdout.each_line do |line|
+      Utility::uniqueDAG(stdout.lines.map do |l|
         # trim address, hash, refcount and metric
-        p = line.split.drop 4
-        next unless aspath? p
+        l.split.drop 4
+      end.select do |p|
+        aspath? p
+      end.map do |p|
         # trim tail i, e or ?
-        p = p.reverse.drop(1).reverse
-
-        udag << Utility::Pair.new(:self, p.first)
-        p.each_cons(2){ |l, r| udag << Utility::Pair.new(l, r) }
-      end
-
-      udag
+        p.reverse.drop(1).reverse
+      end)
     end
   end
 end
