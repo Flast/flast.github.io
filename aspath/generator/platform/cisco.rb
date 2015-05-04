@@ -22,7 +22,7 @@ module Platform
             ch.exec 'show bgp ipv6 unicast paths' do |ch, success|
               abort unless success
               ch.on_data do |_, data|
-                stdout = data
+                stdout = data.lines
               end
             end
           end
@@ -31,14 +31,15 @@ module Platform
         # ignore 'connection reset by peer'
       end
 
-      Utility::uniqueDAG(stdout.lines.map do |l|
+      Utility::uniqueDAG(stdout.map do |l|
         # trim address, hash, refcount and metric
         l.split.drop 4
       end.select do |p|
         aspath? p
       end.map do |p|
         # trim tail i, e or ?
-        p.reverse.drop(1).reverse
+        p.pop
+        p
       end)
     end
   end

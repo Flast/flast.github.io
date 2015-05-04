@@ -60,7 +60,7 @@ routers.each do |r|
   case r["vendor"]
   when "cisco"
     require_relative './platform/cisco.rb'
-    path << Platform::Cisco.paths(r["hostname"], r["user"], keys: r["keys"])
+    path << Platform::Cisco.paths(r["hostname"], r["user"], r["auth"])
   end
 end
 
