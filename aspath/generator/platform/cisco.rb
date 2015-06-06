@@ -14,6 +14,7 @@ module Platform
 
     def self.paths(host, user, opt = {})
       stdout = [""]
+      opt = Hash[opt.to_a.map {|i| [i[0].to_sym, i[1]]}]
 
       opt[:send_env] = false
       begin
