@@ -13,7 +13,7 @@ module Platform
     end
 
     def self.paths(host, user, opt = {})
-      stdout = ""
+      stdout = [""]
 
       opt[:send_env] = false
       begin
