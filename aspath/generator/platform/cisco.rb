@@ -28,7 +28,7 @@ module Platform
             end
           end
         end
-      rescue
+      rescue Net::SSH::Disconnect
         # ignore 'connection reset by peer'
       end
 
