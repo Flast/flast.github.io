@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+# ./generator/path.rb <ASN> <router.json>
+
 require 'set'
 require 'date'
 require 'json'
