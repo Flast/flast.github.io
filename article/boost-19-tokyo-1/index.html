@@ -40,7 +40,7 @@
     <section class="slides layout-widescreen template-boost">
 
       <article>
-        <h1>Session Title</h1>
+        <h1>Boost.ConfigとSG10と</h1>
         <p>
           Kohei Takahashi
           <br />
@@ -53,8 +53,90 @@
         <ul>
           <li>Twitter: <a href="https://twitter.com/Flast_RO">@Flast_RO</a> / <a href="https://wtiter.com/Flast_NET">@Flast_NET</a></li>
           <li><a href="http://www.ihanet.info/">IHANet</a> AS64623</li>
-          <li>職業: Cryoliteの敵<img class="centered" src='http://gyazo.flast.jp/e25fa07d4509f71e2af77e8a4c26d8f0.png' /></li>
+          <li>職業: Cryoliteの敵<img class="centered" src='http://gyazo.flast.jp/img/e25fa07d4509f71e2af77e8a4c26d8f0.png' /></li>
         </ul>
+      </article>
+
+      <article>
+        <h2>Boost.ConfigとSG10と</h2>
+      </article>
+
+      <article>
+        <h3>Boost.ConfigとSG10と</h3>
+        <ul>
+          <li>新しい規格が公開たとしてもコンパイラがすぐに全てを実装できるわけではない</li>
+          <li>実装はfeature-detection macroと呼ばれるものを定義する</li>
+          <li>#if(def) - #endifで代替実装へスイッチさせる</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Boost.Config</h3>
+        <ul>
+          <li>Boostにとても古く(少なくとも1.9.0)からあるライブラリ</li>
+          <li>もともとは不完全なコンパイラの検出と回避するためにあった</li>
+          <li>特にBorなんとかVなんとかとか...</li>
+          <li>名目上Boostの実装のためのライブラリでユーザが使うことは想定していない</li>
+          <li>今はC++11/14の新機能検出が多い</li>
+          <li>マクロによってサポート<span class="red">している</span>というのとサポート<span class="red">していない</span>というのが混在している</li>
+          <li>人間がコンパイラのバージョン毎のサポート状況を手で書いてる</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Boost.Configの使い方</h3>
+        <pre class="prettyprint lang-cpp">
+#include &lt;boost/config.hpp&gt; // 必須
+
+#if defined(BOOST_NO_CXX11_RVALUE_REFERENCE)
+#   error "右辺値参照は必須"
+#elsif defined(BOOST_NO_CXX11_HDR_TYPE_TRAITS)
+#   error "&lt;type_traits&gt;ヘッダは必須"
+#else
+
+#include &lt;type_traits&gt;
+template &lt;typename T&gt;
+BOOST_CXX14_CONSTEXPR typename std::remove_reference&lt;T&gt;::type&&
+move(T&& x) BOOST_NOEXCEPT
+{
+    return static_cast&lt;typename std::remove_reference&lt;T&gt;::type&&&gt;(x);
+}
+#endif
+</pre>
+      </article>
+
+      <article>
+        <h3>SG10</h3>
+        <ul>
+          <li>2012年から発足し始めたStudy Groupという特定領域に絞った研究部会の一</li>
+          <li><a href="https://isocpp.org/std/standing-documents/sd-6-sg10-feature-test-recommendations">SD-6</a>(<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4200">n4200</a>)という中間報告書のようなものが出ている</li>
+          <li>Boost.Configと目的はほとんど同じだが、サポートの度合いを比較することができる</li>
+          <li>加えてヘッダが存在するかを問い合わせる事ができる</li>
+          <li>Clangをはじめ、GCCでも実装が進んでる</li>
+          <li>コンパイラの<span class="red">自己申告</span></li>
+          <li>今のところ次期標準に入るとは限らない(はず)</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>SG10の使い方</h3>
+        <pre class="prettyprint cpp-lang">
+#if !defined(__cpp_rvalue_references)
+#   error "右辺値参照は必須"
+#elsif !__has_include(&lt;type_traits&gt;)
+#   error "&lt;type_traits&gt;ヘッダは必須"
+#else
+#   include &lt;type_traits&gt;
+#   if __cpp_constexpr &gt;= 201304
+constexpr
+#   endif
+typename std::remove_reference&lt;T&gt;::type&&
+move(T&& x) noexcept // XXX: SD-6(n4200)にnoexceptに関するマクロは無い
+{
+    return static_cast&lt;typename std::remove_reference&lt;T&gt;::type&gt;(x);
+}
+#endif
+</pre>
       </article>
 
       <article>
