@@ -75,7 +75,7 @@
         <ul>
           <li>Boostにとても古く(少なくとも1.9.0)からあるライブラリ</li>
           <li>もともとは不完全なコンパイラの検出と回避するためにあった</li>
-          <li>特にBorなんとかVなんとかとか...</li>
+          <li>特にBorなんとかVisなんとかとか...</li>
           <li>名目上Boostの実装のためのライブラリでユーザが使うことは想定していない</li>
           <li>今はC++11/14の新機能検出が多い</li>
           <li>マクロによってサポート<span class="red">している</span>というのとサポート<span class="red">していない</span>というのが混在している</li>
@@ -96,20 +96,20 @@
 
 #include &lt;type_traits&gt;
 template &lt;typename T&gt;
-BOOST_CXX14_CONSTEXPR typename std::remove_reference&lt;T&gt;::type&&
-move(T&& x) BOOST_NOEXCEPT
+BOOST_CXX14_CONSTEXPR typename std::remove_reference&lt;T&gt;::type&amp;&amp;
+move(T&amp;&amp; x) BOOST_NOEXCEPT
 {
-    return static_cast&lt;typename std::remove_reference&lt;T&gt;::type&&&gt;(x);
+    return static_cast&lt;typename std::remove_reference&lt;T&gt;::type&amp;&amp;&gt;(x);
 }
-#endif
-</pre>
+#endif</pre>
       </article>
 
       <article>
         <h3>SG10</h3>
         <ul>
           <li>2012年から発足し始めたStudy Groupという特定領域に絞った研究部会の一</li>
-          <li><a href="https://isocpp.org/std/standing-documents/sd-6-sg10-feature-test-recommendations">SD-6</a>(<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4200">n4200</a>)という中間報告書のようなものが出ている</li>
+          <li><a href="https://isocpp.org/std/standing-documents/sd-6-sg10-feature-test-recommendations">SD-6</a>
+            (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4200">n4200</a>)という中間報告書のようなものが出ている</li>
           <li>Boost.Configと目的はほとんど同じだが、サポートの度合いを比較することができる</li>
           <li>加えてヘッダが存在するかを問い合わせる事ができる</li>
           <li>Clangをはじめ、GCCでも実装が進んでる</li>
@@ -130,13 +130,130 @@ move(T&& x) BOOST_NOEXCEPT
 #   if __cpp_constexpr &gt;= 201304
 constexpr
 #   endif
-typename std::remove_reference&lt;T&gt;::type&&
-move(T&& x) noexcept // XXX: SD-6(n4200)にnoexceptに関するマクロは無い
+typename std::remove_reference&lt;T&gt;::type&amp;&amp;
+move(T&amp;&amp; x) noexcept // XXX: SD-6(n4200)にnoexceptに関するマクロは無い
 {
-    return static_cast&lt;typename std::remove_reference&lt;T&gt;::type&gt;(x);
+    return static_cast&lt;typename std::remove_reference&lt;T&gt;::type&amp;&amp;&gt;(x);
 }
-#endif
-</pre>
+#endif</pre>
+      </article>
+
+      <article>
+        <h3>Boost.ConfigとSG10とでできることの違い</h3>
+        <ul>
+          <li>C++11/14の機能を調べるという点ではあまり差はない</li>
+          <li>SG10の__has_includeは標準ヘッダ以外にも使えて強力</li>
+          <li>Configは細々としたユーティリティマクロが便利</li>
+        </ul>
+      </article>
+
+      <article>
+        <h2>いくつかピックアップ</h2>
+      </article>
+
+      <article>
+        <h3>BOOST_WORKAROUND</h3>
+        <ul>
+          <li>コンパイラの特定のバージョンを回避したりする
+          <ul>
+            <li>→コンパイラ定義のマクロ(__GNUC__とか)じゃダメなのか</li>
+            <li>→ダメではないが冗長で扱いづらくわかりづらい</li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>BOOST_WORKAROUND (例)</h3>
+        <br>
+        GCC 4.7.0だけでバグがありWAがあるが他のコンパイラではWAは通らない
+        <pre class="prettyprint cpp-lang">
+#if defined(__GNUC__) &amp;&amp; !defined(__clang_major__) &amp;&amp; \
+    !defined(__INTEL_COMPILER)) &amp;&amp; \
+    (__GNUC__ == 4 &amp;&amp; __GNUC_MINOR__ == 7 &amp;&amp; __GNUC_PATCHLEVEL__ == 0)
+    // GCC 4.7.0用のWorkaround
+    ...
+#endif</pre>
+        <span class="build"><span>
+        Boost.Configだと
+        <pre class="prettyprint cpp-lang">
+#if BOOST_WORKAROUND(BOOST_GCC, == 40700)
+    // GCC 4.7.0用のWorkaround
+    ...
+#endif</pre>
+        </span></span>
+      </article>
+
+      <article>
+        <h3>BOOST_WORKAROUNDの実装</h3>
+      </article>
+
+      <article>
+        <h3>Clangの罠</h3>
+        <ul class="build">
+          <li>残念ながらClangのバージョン識別には__clang_major__使うべきではない</li>
+          <span>
+          <li>りんごが好き勝手にバージョン番号をつけているので残念なことになる</li>
+          <li>そこでSG10の登場</li>
+          </span>
+          <span>
+          <li>SG10マクロは自己申告制なので、マクロの有無のパターンでバージョンを識別できる</li>
+          <li><a href="https://github.com/boostorg/config/blob/94a3bf4f12807275b32827c7a43cabbcaf404a26/include/boost/config/compiler/clang.hpp#L232-L248">C++14 constexprのバグを回避する例</a></li>
+          </span>
+        </ul>
+      </article>
+
+      <article>
+        <h3>BOOST_CONSTEXPR / BOOST_NOEXCEPT</h3>
+        <ul>
+          <li>該当する言語仕様をサポートしていたら、対応するキーワードや式になる</li>
+          <li>サポートしていなかったら空になる</li>
+          <li>これら以外にもいくつかある（現在提案中のものもある）</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>BOOST_PREVENT_MACRO_SUBSTITUTION</h3>
+        <ul>
+          <li>問題：関数形式マクロが置き換えられてとても困る
+          <ul>
+            <li>#include &lt;windows.h&gt;っていうやばいヘッダとか</li>
+            <li><pre class="prettyprint cpp-lang">
+#include &lt;windows.h&gt;
+
+template &lt;typename T&gt;
+constexpr T saturate(T val, T lower, T upper)
+{
+    return std::min(upper, std::max(lower, val)); // error
+}</pre></li>
+          </ul></li>
+          <li>BOOST_PREVENT_MACRO_SUBSTITUTIONを使えばマクロ展開がされない！！</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>BOOST_PREVENT_MACRO_SUBSTITUTION</h3>
+        <ul>
+          <li>使い方は簡単
+            <pre class="prettyprint cpp-lang">
+#include &lt;windows.h&gt;
+
+template &lt;typename T&gt;
+constexpr T saturate(T val, T lower, T upper)
+{
+    return std::min BOOST_PREVENT_MACRO_SUBSTITUTION (upper,
+        std::max BOOST_PREVENT_MACRO_SUBSTITUTION (lower, val));
+}</pre></li>
+          <li>どうしてこんなことになるかは<a href="http://cpplover.blogspot.jp/2010/06/define-boostpreventmacrosubstitution.html">江添氏のブログを参照</a></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>まとめ</h3>
+        <ul>
+          <li>ライブラリを書く人には便利なBoost.ConfigとSG10を紹介しました</li>
+          <li>まぁあまり好き好んで使う人は多くないと思うけど</li>
+          <li>古のやばいコンパイラの実装とか深淵を覗くことができる</li>
+        </ul>
       </article>
 
       <article>
