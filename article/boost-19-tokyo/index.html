@@ -5,7 +5,7 @@
 
   Author: Kohei Takahashi
 
-  URL: http://www.flast.jp/article/boost-19-tokyo-1/
+  URL: http://www.flast.jp/article/boost-19-tokyo/
 -->
 
 <html lang='ja'>
@@ -185,19 +185,49 @@ move(T&amp;&amp; x) noexcept // XXX: SD-6(n4200)にnoexceptに関するマクロ
 
       <article>
         <h3>BOOST_WORKAROUNDの実装</h3>
+        <pre class="prettyprint cpp-lang">
+#  define BOOST_WORKAROUND(symbol, test)                \
+         ((symbol ## _WORKAROUND_GUARD + 0 == 0) &amp;&amp;     \
+         (symbol != 0) &amp;&amp; (1 % (( (symbol test) ) + 1)))
+
+#if BOOST_WORKAROUND(BOOST_GCC, == 40700)</pre>
+      </article>
+
+      <article>
+        <h3>BOOST_WORKAROUNDの実装</h3>
+        <pre class="prettyprint cpp-lang">
+// GCC 5.2.1 の場合
+#if ((BOOST_GCC_WORKAROUND_GUARD + 0 == 0) &amp;&amp; \
+     (50201 != 0) &amp;&amp; (1 % (( (50201 == 40700) ) + 1)))
+#if (1 % (( (false) ) + 1))
+#if (1 % 1) // #=&gt; 0
+
+// GCC 4.7.0 の場合
+#if ((BOOST_GCC_WORKAROUND_GUARD + 0 == 0) &amp;&amp; \
+     (40700 != 0) &amp;&amp; (1 % (( (40700 == 40700) ) + 1)))
+#if (1 % (( (true) ) + 1))
+#if (1 % 2) // #=&gt; 1
+
+// Clang とか別のコンパイラの場合
+#if ((BOOST_GCC_WORKAROUND_GUARD + 0 == 0) &amp;&amp; \
+     (BOOST_GCC != 0) &amp;&amp; (1 % (( (BOOST_GCC == 40700) ) + 1)))
+#if ((true) &amp;&amp; \
+     (false) &amp;&amp; (1 % (( (BOOST_GCC == 40700) ) + 1))) #=&gt; 0</pre>
       </article>
 
       <article>
         <h3>Clangの罠</h3>
-        <ul class="build">
+        <ul>
           <li>残念ながらClangのバージョン識別には__clang_major__使うべきではない</li>
+          <span class="build">
           <span>
           <li>りんごが好き勝手にバージョン番号をつけているので残念なことになる</li>
-          <li>そこでSG10の登場</li>
+          <li>そこでSG10の登場 (Clangの場合はSG10ではなくて独自提供のマクロ)</li>
           </span>
           <span>
           <li>SG10マクロは自己申告制なので、マクロの有無のパターンでバージョンを識別できる</li>
           <li><a href="https://github.com/boostorg/config/blob/94a3bf4f12807275b32827c7a43cabbcaf404a26/include/boost/config/compiler/clang.hpp#L232-L248">C++14 constexprのバグを回避する例</a></li>
+          </span>
           </span>
         </ul>
       </article>
