@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <title></title>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="shower/themes/ribbon/styles/screen-16x10.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/default.min.css">
+</head>
+<body class="shower list">
+<style>
+section pre {
+  font-size: large;
+  line-height: 1;
+};
+</style>
+  <header class="caption">
+    <h1>明日から使える（かは分からない）Qt</h1>
+    <p>Kohei Takahashi - <a href="https://twitter.com/Flast_RO">@Flast_RO</a></p>
+  </header>
+  <section class="slide" id="cover">
+    <h2>明日から使える<br/>（かは分からない）<br/>Qt</h2>
+    <p>Kohei Takahashi (Flast)<br/>Jun 24, 2016</p>
+  </section>
+  <section class="slide">
+    <h2>Who am I</h2>
+    <ul>
+      <li>Twitter: <a href="https://twitter.com/Flast_RO">@Flast_RO</a> / <a href="https://twitter.com/Flast_NET">@Flast_NET</a></li>
+      <li><a href="http://www.bgp.moe">IHanet</a> AS64623</a></li>
+      <li><a href="http://www.boost.org/libs/fusion">Boost.Fusion</a>, <a href="http://www.boost.org/libs/phoenix">Boost.Phoenix</a>のメインメンテナ</li>
+      <li>都内の2Dのような3Dのような会社勤務</li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2>Qtとは</h2>
+    <ul>
+      <li>きゅーと と発音（非公式に きゅーてぃー と呼ぶ人もいる）</li>
+      <li>C++で記述されたフレームワーク</li>
+      <li>一般にクロスプラットフォームなUIフレームワークとして認識されている</li>
+      <li>GPLかLGPL、若しくは有償でのコマーシャルライセンス</li>
+      <li>大規模なデスクトップアプリケーションでの採用実績が目立つ</li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2>Qtのバージョン</h2>
+    <table>
+      <tr><th>upcoming</th><td>5.8</td><td>TBD</td></tr>
+      <tr><th>upcoming</th><td>5.7</td><td>Jun 16, 2016 release</td></tr>
+      <tr><th>latest / LTS</th><td>5.6.1-1</td><td>Jun 22, 2016 release</td></tr>
+      <tr><th>legacy LTS <span style="color: red">(EOL on Dec 19, 2015)</span></th><td>4.8.7</td><td>May 25, 2015 release</td></tr>
+    </table>
+    <ul>
+      <li>LTSのサポート期間はおおよそ3年間</li>
+      <li>5.7系以降からC++11へ完全移行</li>
+      <li>以降特に断りがない限りQt 5.6 LTSでのお話</li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2>モジュール</h2>
+    <ul>
+      <li>Qt Core: コアコンポーネント（コンテナとかQObjectとか）</li>
+      <li>Qt Gui: GUIフレームワーク <span style="font-size: large; color: red">←今日はここ</span></li>
+      <li>Qt Test: 単体テスト</li>
+      <li>Qt Multimedia: マルチメディア処理</li>
+      <li>完全なリストは<a href="http://doc.qt.io/qt-5.6/qtmodules.html">All Modules | Qt 5.6</a>を参照</li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2>サポート環境、開発環境</h2>
+    <ul>
+      <li>Win7以降、OS X 10.8以降、、、</li>
+      <li>それぞれベンダが提供しているコンパイラ、に加えてWindowsではMinGW</li>
+      <li>MSVCはExpress Editionで問題ない
+        <ul><li>MSVC 2010 EEは64bitを出力できないので注意</li></ul>
+      </li>
+      <li>マトリックスは<a href="http://doc.qt.io/qt-5.6/supported-platforms.html">こちら</a></li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2>開発環境(IDE)</h2>
+    <ul>
+      <li>Qt Creatorという公式のIDEがある</li>
+      <li>基本的にこのIDEを使ったほうがよい<ul>
+        <li>ツールや.soへのパスとかが通っている</li>
+        <li>Qt用のUI記述言語(後述)もIDE上から触れる</li>
+      </ul></li>
+      <li>Windowsでデバッグする場合にはVSでアタッチした方がいい様に思う</li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2>QtでのUIの実装方法</h2>
+    <ul>
+      <li>Qtが用意している方法は主に3通り
+        <ol>
+          <li>C++を直接書く</li>
+          <li>Qt Creatorで.uiファイルを記述する</li>
+          <li>Qt QuickでQMLを用いる</li>
+        </ol>
+      </li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2>C++を直接書く</h2>
+    <ul>
+      <li>Pros.
+        <ol>
+          <li>圧倒的に出来ることは多い</li>
+          <li>気に入らない挙動は上書き出来る</li>
+        </ol></li>
+      <li>Cons.
+        <ol>
+          <li>確実に手間は多くなる</li>
+          <li>他の方法と組み合わせようとしたときに、独自拡張したプロパティ等の受け渡しが不可</li>
+        </ol></li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2>C++を直接書く</h2>
+    <pre class="c++">
+      <code>class MyWidget : public <a href="http://doc.qt.io/qt-5.6/qwidget.html"><mark>QWidget</mark></a> {</code>
+      <code>    <a href="http://doc.qt.io/qt-5.6/qobject.html#Q_OBJECT"><mark>Q_OBJECT</mark></a></code>
+      <code>    QPushButton* hide = <mark>new </mark><a href="http://doc.qt.io/qt-5.6/qpushbutton.html"><mark>QPushButton</mark></a><mark>("hide", this)</mark>;</code>
+      <code>public:</code>
+      <code>    explicit MyWidget(QWidget* parent = nullptr) : QWidget(parent) {</code>
+      <code>        <a href="http://doc.qt.io/qt-5.6/qobject.html#connect"><mark>connect</mark></a><mark>(hide, SIGNAL(clicked(bool)), this, SLOT(hide()))</mark>;</code>
+      <code>    }</code>
+      <code>protected:</code>
+      <code>    <mark>void </mark><a href="http://doc.qt.io/qt-5.6/qwidget.html#hideEvent"><mark>hideEvent</mark></a><mark>(QHideEvent* event) override</mark> { show(); }</code>
+      <code>};</code>
+    </pre>
+  </section>
+  <section class="slide">
+    <h2>C++を直接書く</h2>
+    <pre class="c++">
+      <code>int main(int argc, char* argv[]) {</code>
+      <code>    <a href="http://doc.qt.io/qt-5.6/qapplication.html"><mark>QApplication</mark></a> a(argc, argv);</code>
+      <code>    </code>
+      <code>    <a href="http://doc.qt.io/qt-5.6/qmainwindow.html"><mark>QMainWindow</mark></a> w;</code>
+      <code>    w.setCentralWidget(new MyWidget);</code>
+      <code>    w.show();</code>
+      <code>    </code>
+      <code>    return a.exec();</code>
+      <code>}</code>
+    </pre>
+  </section>
+  <section class="slide">
+    <h2>Qt Creatorで.uiファイルを記述する</h2>
+    <ul>
+      <li>Pros.
+        <ol>
+          <li>Qt CreatorのデザイナーモードだとD&amp;Dで配置とか出来る</li>
+          <li>プロパティやシグナルもある程度は操作可能</li>
+        </ol></li>
+      <li>Cons.
+        <ol>
+          <li>uiだけではQtの挙動を上書きすることはできない</li>
+          <li>C++で挙動を上書きできたとしても、指定が若干面倒</li>
+        </ol></li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2>Qt QuickでQMLを用いる</h2>
+    <ul>
+      <li>最近本が出版されたりで盛ん</li>
+      <li>QMLとJavaScriptでほとんど賄う</li>
+      <li style="color: red" class="next">使ったこと無いからよーわからん</li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2>デザインを変えたい</h2>
+    <ul>
+      <li>QSSというCSSライクなスタイルシートをランタイムに適用可能</li>
+      <li>QPainterで自分で描画する場合、スタイルシートガン無視になるので注意</li>
+      <li><a href="http://doc.qt.io/qt-5.6/stylesheet.html">Qt Style Sheets | Qt Widgets 5.6</a></li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2>i18n/m17nしたい</h2>
+    <ul>
+      <li>専用のツールを使って（わなくてもいいけど）対訳をTSファイルに記述していく</li>
+      <li><code>auto eng = QObject::tr("English");</code>とかすると、<code>"英語"</code>が格納されてたりする</li>
+      <li>こちらはアプリケーションレベルで適用される</li>
+      <li><a href="http://doc.qt.io/qt-5.6/internationalization.html">Internationalization with Qt | Qt 5.6</a></li>
+      <li><a href="http://doc.qt.io/qt-5.6/qtquick-internationalization.html">Internationalization and Localization with Qt Quick | Qt 5.6</a></li>
+    </ul>
+  </section>
+    <div class="progress"></div>
+    <script src="shower/shower.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>
