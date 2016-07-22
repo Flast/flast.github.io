@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <title></title>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="shower/themes/ribbon/styles/screen-16x10.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/default.min.css">
+</head>
+<body class="shower list">
+<style>
+section pre {
+  font-size: large;
+  line-height: 1;
+};
+</style>
+  <header class="caption">
+    <h1>Boost.Fusion/Phoenixのメンテナになったのでその記念的ななにか</h1>
+    <p>Kohei Takahashi</p>
+  </header>
+  <section class="slide" id="cover">
+    <h2>Boost.Fusion/Phoenixのメンテナになったのでその記念的ななにか</h2>
+    <p>Kohei Takahashi (Flast)<br/>Jul 22, 2016</p>
+  </section>
+  <section class="slide">
+    <h2>Who am I</h2>
+    <ul>
+      <li>Twitter: <a href="https://twitter.com/Flast_RO">@Flast_RO</a></li>
+      <li><a href="http://www.boost.org/libs/fusion">Boost.Fusion</a>, <a href="http://www.boost.org/libs/phoenix">Boost.Phoenix</a>のメインメンテナ</li>
+      <li>都内の2Dのような3Dのような会社勤務</li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2 style="line-height: 0">今日話したかったこと</h2>
+    <img src="http://gyazo.flast.jp/img/1187d19ed3b476c4d6d8fb115c100233.png" style="height: 90%"/>
+  </section>
+  <section class="slide">
+    <h2>今日話したかったこと</h2>
+    <img src="http://gyazo.flast.jp/img/a561de8150c320e78a5720b2978ad981.png"/>
+    <a href="https://sourceforge.net/projects/boost/files/boost-binaries/">https://sourceforge.net/projects/boost/files/boost-binaries/</a>
+  </section>
+  <section class="slide">
+    <h2>今日話すこと</h2>
+    <blockquote style="font-size: large" class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="ja" dir="ltr"><a href="https://twitter.com/Flast_RO">@Flast_RO</a> それではぼく個人の希望として、Workaround周りのBoostライブラリ機能、苦労話、Boostのレギュレッション、pull requestのやり方(粒度、説明、ルール)、以前に比べて何がどれくらいよくなっているか、とかどうでしょ。</p>&mdash; Akira Takahashi (@cpp_akira) <a href="https://twitter.com/cpp_akira/status/749883931130929153">July 4, 2016</a></blockquote>
+    <blockquote style="font-size: large" class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="ja" dir="ltr"><a href="https://twitter.com/Flast_RO">@Flast_RO</a> はい、メンテナンス作業全般ですね。Boostに直接関わる人向けだけでなく、幅広いプラットフォームをサポートするためには、こんなこともしないといけない、みたいなことがわかるとうれしいですねー。</p>&mdash; Akira Takahashi (@cpp_akira) <a href="https://twitter.com/cpp_akira/status/749885990911651841">July 4, 2016</a></blockquote>
+  </section>
+  <section class="slide">
+    <h2>Boost.orgのメンバーとロール</h2>
+    <ul>
+      <li>Steering Committee</li>
+      <li>Author / Committer / Maintainer</li>
+      <li>(Community Maintainance Team)</li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2>Steering Committee</h2>
+    <ul>
+      <li><a href="https://sites.google.com/a/boost.org/steering/">Boost Steering Committee Home Page</a></li>
+      <li>全体の統括とリリースの管理を行う人たち</li>
+      <li>2年間の任期制</li>
+      <li>C++Nowで会合をしているらしく、その場への出席が要求される</li>
+      <li>この権限を以ってリポジトリにコミットすることはまずない</li>
+      <li>正直Beman Dawes以外は見ない気がする...</li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2>Author / Committer / Maintainer</h2>
+    <ul>
+      <li>ライブラリを作った人か、メンテナンスを手伝ってる人かぐらいの違い</li>
+      <li>コミット権はそのライブラリのみ</li>
+      <li>CommitterとかMaintainerとかはAuthorが必要と判断するまでは特に作られないことが多い</li>
+      <li>各ライブラリの中身とかにはSteering Committeeが口出してくることはまず無いのでAuthorの好みが色濃く出る<ul>
+        <li>フルメタル・パニック！のアマルガム（敵性勢力）を想像してもらうとわかりやすい</li>
+      </ul></li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2>(Community Maintainance Team)</h2>
+    <ul>
+      <li>最近活動が無いので気にしなくてよい</li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2>レギュレーションとかPRとか</h2>
+    <ul>
+      <li>実は以前にそんなことは話してた（当時はまだコミット権は無かった）</li>
+      <li><a href="http://www.flast.jp/article/boost-16-osaka/">Boost.勉強会 #16 大阪 - 便利！電動歯ブラシ</a></li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2>ML投稿時の注意、top postについて</h2>
+    <ul>
+      <li>返信は一番上にまとめて書く(top post)のではなく、引用の下に返信を書いて(in-line)どの文への返信なのかを明確にする</li>
+      <li>悪い例: <a href="http://thread.gmane.org/gmane.comp.lib.boost.devel/258417">GSoC 2015 prospective student</a></li>
+      <li>良い例: <a href="http://thread.gmane.org/gmane.comp.lib.boost.devel/268129">[regression][winapi] Tests not being run</a></li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2>バグレポ、プルリクについて</h2>
+    <ul>
+      <li>GitHubへ移行した直後ぐらいはissueはTrac(svn.boost.org)に書いて、パッチはGitHubでPRをオープンすることになってた</li>
+      <li>最近GitHubで開発されていたものが取り入れられることが多なり、GitHub issueを使いたいという話が多くなった<ul>
+        <li>もしGitHub issueが有効になっているリポジトリがあれば、それはGitHubで報告して欲しいということ</li>
+      </ul></li>
+      <li>粒度とかルールとかは完全にAuthorの気分次第なので、<b>とりあえず出してみる</b>のがいい</li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2>その他細かいこと</h2>
+    <ul>
+      <li>コーディング規約とか言うものに苦心する時間あったら実装に苦心して下さい<ul>
+        <li>あまりにも変な書き方したときは注意されるけど、braceの位置とか適当でもacceptされる</li>
+        <li>つまり後から読む人はとても地獄</li>
+      </ul></li>
+      <li>APIは保存してもABIを保存する気は無くてよい</li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2>Workaround周りの話とか苦労話</h2>
+    <ul>
+      <li>これも前話した気がする</li>
+      <li><a href="http://www.flast.jp/article/boost-19-tokyo/">Boost.勉強会 #19 東京 - Boost.ConfigとSG10と</a></li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2>まとめ</h2>
+    <ul>
+      <li>Boostは実験的な位置づけだった頃の感覚で今も運営しているのでコミュニティとしては非常に緩い</li>
+      <li>この規模で好き勝手やってるのはBoostぐらいしかないのでは...</li>
+    </ul>
+  </section>
+  <div class="progress"></div>
+  <script async src="shower/shower.min.js"></script>
+  <script async src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+  <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>
