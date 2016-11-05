@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <title>Boost.Fusion/Phoenixのメンテナになったのでその記念的ななにか in 札幌</title>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="shower/themes/ribbon/styles/screen-16x10.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/default.min.css">
+</head>
+<body class="shower list">
+<style>
+section pre {
+  font-size: large;
+}
+</style>
+  <section class="slide" id="cover">
+    <h2>実行コンテキストの抽象化ライブラリ達</h2>
+    <p>Kohei Takahashi (Flast)<br/>Nov 5, 2016</p>
+  </section>
+  <section class="slide">
+    <p>質問とかは随時</p>
+  </section>
+  <section class="slide">
+    <h2>実行コンテキスト</h2>
+    <ul>
+      <li>このスライドではとりあえず明確な定義はあたえません
+        <ul><li>ｺﾉﾌﾞﾝﾔﾆｸﾜｼｸﾅｲﾋﾄｺﾜｲ...</li></ul>
+      </li>
+      <li>メモリとかプログラムカウンタとかが他の(同種の)実行コンテキストの影響を受けないとかそれぐらい</li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2>Boostが提供しているライブラリ (~1.61)</h2>
+    <table>
+      <tr><td colspan="2"/><th colspan="3">スコープ</th></tr>
+      <tr><td colspan="2"/><th>ユーザ<br/>スレッド</th><th>カーネル<br/>スレッド</th><th>プロセス</th></tr>
+      <tr><th rowspan="2">コンテキストを</th><td>またぐ</td><td style="background: lightgray"/><td/><td>Interprocess</td></tr>
+      <tr><td style="padding-left: 0px">まがない</td><td/><td>Thread</td><td/></tr>
+    </table>
+  </section>
+  <section class="slide">
+    <h2>Boost.Thread</h2>
+    <ul>
+      <li>Boost 1.25からあるそれなりに古参なライブラリ</li>
+      <li>各プラットフォームが提供しているスレッド関連のAPIを抽象化</li>
+      <li>C++11で追加された並列ライブラリ、&lt;thread&gt;&lt;future&gt;&lt;mutex&gt;&lt;condition_variable&gt;に影響を与えた
+        <ul><li>C++14の&lt;shared_mutex&gt;はちょっと違う</li></ul>
+      </li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2>Boost.Interprocess</h2>
+    <ul>
+      <li>Boost 1.35からある</li>
+      <li>各プラットフォームが提供するIPC(Inter-process Communication)のAPIを抽象化</li>
+      <li>プロセスを越えてデータ構造を共有できる</li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2>補足 Boost.Context</h2>
+    <ul>
+      <li>ユーザレベルで実行コンテキストを操作できるライブラリ</li>
+      <li>直接使うことは通常ない</li>
+      <li>なにしろインターフェースがめっちゃ変わる</li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2>補足 Boost.Coroutine2</h2>
+    <ul>
+      <li>一段階Contextをラップしたライブラリ
+        <ul><li>Boost.Coroutineはいい奴だったよ...</li></ul>
+      </li>
+      <li>およそCallback的な使い方をする
+        <ul>
+          <li>ので表には入れなかった</li>
+          <li>PythonのGeneratorとか</li>
+        </ul>
+      </li>
+      <li>使うときは<span style="color: red">インターフェースの変更に注意</span></li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2>補足 Boost.Coroutine2</h2>
+    <pre class="c++" style="font-size: small">
+        <code>// <a href="http://melpon.org/wandbox/permlink/XWtY5ceWcFIMxpIB">[Wandbox]三へ( へ՞ਊ ՞)へ ﾊｯﾊｯ</a></code>
+        <code>#include &lt;iostream&gt;</code>
+        <code>#include &lt;boost/coroutine2/all.hpp&gt;</code>
+        <code>using namespace boost::coroutines2;</code>
+        <code>void generator(asymmetric_coroutine<int>::push_type&amp; yield, int offset)</code>
+        <code>{</code>
+        <code>    yield(0 + offset);</code>
+        <code>    yield(1 + offset);</code>
+        <code>}</code>
+        <code>int main()</code>
+        <code>{</code>
+        <code>    asymmetric_coroutine<int>::pull_type coro([](auto&amp; yield) { generator(yield, 10); });</code>
+        <code>    for (int val : coro)</code>
+        <code>        std::cout &lt;&lt; val &lt;&lt; std::endl;</code>
+        <code>}</code>
+    </pre>
+  </section>
+  <section class="slide">
+    <h2>Boostが提供しているライブラリ (1.62)</h2>
+    <table>
+      <tr><td colspan="2"/><th colspan="3">スコープ</th></tr>
+      <tr><td colspan="2"/><th>ユーザ<br/>スレッド</th><th>カーネル<br/>スレッド</th><th>プロセス</th></tr>
+      <tr><th rowspan="2">コンテキストを</th><td>またぐ</td><td style="background: lightgray"/><td/><td>Interprocess</td></tr>
+      <tr><td style="padding-left: 0px">まがない</td><td style="color: red; font-weight: bold">Fiber</td><td>Thread</td><td/></tr>
+    </table>
+  </section>
+  <section class="slide">
+    <h2>Boost.Fiber (1.62~)</h2>
+    <ul>
+      <li>Boost.Contextをラップしたライブラリ part2</li>
+      <li>Boost.Threadに似たインターフェースを持っている</li>
+      <li>スケジューリングは提供されているものを使える他、自分で実装することも出来る</li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2>Boost.Fiber (1.62~)</h2>
+    <ul>
+      <li>Contextはユーザランドでのプログラムカウンタ操作を提供していた</li>
+      <li>Coroutine2は継続のような処理を提供していた</li>
+      <li>Fiberはあたかもスレッドのように扱うことができる処理の流れを記述できる
+        <ul><li>kernelのプリエンプションではないタイミングでのコンテキストスイッチ</li></ul>
+      </li>
+  </section>
+  <section class="slide">
+    <h2>Boost.Fiber (1.62~)</h2>
+    <pre class="c++" style="font-size: small">
+        <code>#include &lt;boost/fiber/all.hpp&gt;</code>
+        <code>#include &lt;iostream&gt;</code>
+        <code>#include &lt;thread&gt;</code>
+        <code>using namespace boost::fibers;</code>
+        <code></code>
+        <code>void show_info(char const* name)</code>
+        <code>{</code>
+        <code>    std::cout &lt;&lt; name</code>
+        <code>      &lt;&lt; ": tid " &lt;&lt; std::this_thread::get_id()</code>
+        <code>      &lt;&lt; ": fid " &lt;&lt; boost::this_fiber::get_id()</code>
+        <code>      &lt;&lt; std::endl;</code>
+        <code>}</code>
+    </pre>
+  </section>
+  <section class="slide">
+    <h2>Boost.Fiber (1.62~) - ラウンドロビン</h2>
+    <pre class="c++" style="font-size: small">
+        <code>int main()</code>
+        <code>{</code>
+        <code>    show_info("main thread");</code>
+        <code>    fiber w1(show_info, "worker1");</code>
+        <code>    fiber w2(show_info, "worker2");</code>
+        <code>    w2.join();</code>
+        <code>    std::cout &lt;&lt; "worker2 joined" &lt;&lt; std::endl;</code>
+        <code>    w1.join();</code>
+        <code>    std::cout &lt;&lt; "worker1 joined" &lt;&lt; std::endl;</code>
+        <code>    fiber w3(show_info, "worker3");</code>
+        <code>    w3.join();</code>
+        <code>    std::cout &lt;&lt; "worker3 joined" &lt;&lt; std::endl;</code>
+        <code>}</code>
+  </section>
+  <section class="slide">
+    <h2>Boost.Fiber (1.62~) - ラウンドロビン</h2>
+    <pre class="c++" style="font-size: small">
+        <code>main thread: tid 140658326201088: fid 0xf4dec0</code>
+        <code>worker1: tid 140658326201088: fid 0xf6e480</code>
+        <code>worker2: tid 140658326201088: fid 0xf7e480</code>
+        <code>worker2 joined</code>
+        <code>worker1 joined</code>
+        <code>worker3: tid 140658326201088: fid 0xf6e480</code>
+        <code>worker3 joined</code>
+  </section>
+  <section class="slide" style="padding-top: 50px">
+    <h2>Boost.Fiber (1.62~) - shared_work出力</h2>
+    <pre class="c++" style="font-size: small">
+        <code>int main() // shared work</code>
+        <code>{</code>
+        <code>    use_scheduling_algorithm&lt;algo::shared_work&gt;();</code>
+        <code>    show_info("main thread");</code>
+        <code>    fiber w1(show_info, "worker1");</code>
+        <code>    fiber w2(show_info, "worker2");</code>
+        <code>    std::thread th{[]</code>
+        <code>        {</code>
+        <code>            use_scheduling_algorithm&lt;algo::shared_work&gt;();</code>
+        <code>            show_info("worker thread");</code>
+        <code>            boost::this_fiber::yield();</code>
+        <code>        }};</code>
+        <code>    th.join();</code>
+        <code>    use_scheduling_algorithm&lt;algo::round_robin&gt;(); // WA</code>
+        <code>    w2.join();</code>
+        <code>    std::cout &lt;&lt; "worker2 joined" &lt;&lt; std::endl;</code>
+        <code>    w1.join();</code>
+        <code>    std::cout &lt;&lt; "worker1 joined" &lt;&lt; std::endl;</code>
+        <code>    boost::fibers::fiber w3(show_info, "worker3");</code>
+        <code>    w3.join();</code>
+        <code>    std::cout &lt;&lt; "worker3 joined" &lt;&lt; std::endl;</code>
+        <code>}</code>
+    </pre>
+  </section>
+  <section class="slide">
+    <h2>Boost.Fiber (1.62~) - shared_work出力</h2>
+    <pre>
+        <code>main thread: tid 139839588258560: fid 0x15c1f40</code>
+        <code>worker thread: tid 139839564433152: fid 0x7f2ee8000980</code>
+        <code>worker1: tid 139839564433152: fid 0x15e2500</code>
+        <code>worker2: tid 139839564433152: fid 0x15f2500</code>
+        <code>worker2 joined</code>
+        <code>worker1 joined</code>
+        <code>worker3: tid 139839588258560: fid 0x15e2500</code>
+        <code>worker3 joined</code>
+    </pre>
+  </section>
+  <section class="slide">
+    <h2>Boost.Fiber (1.62~)</h2>
+    <ul>
+      <li>標準スレッドと同じようなインターフェースでユーザスレッドを扱える</li>
+      <li><code>thread_local</code>は使ってはならない
+        <ul><li>参考: <a href="http://togetter.com/li/437339">Boost.Context with Thread Migration in GCC</a></li></ul>
+      </li>
+      <li>デフォルトで提供しているスケジューリングアルゴリズムは2通り
+        <ul>
+          <li>ユーザが自分で与えることもできる</li>
+          <li><code>shared_work</code>はスレッドが死んだときにめんどっちぃことがある</li>
+        </ul>
+      </li>
+  </section>
+  <section class="slide">
+    <h2>Boostが提供するかもしれないライブラリ</h2>
+    <table>
+      <tr><td colspan="2"/><th colspan="3">スコープ</th></tr>
+      <tr><td colspan="2"/><th>ユーザ<br/>スレッド</th><th>カーネル<br/>スレッド</th><th>プロセス</th></tr>
+      <tr><th rowspan="2">コンテキストを</th><td>またぐ</td><td style="background: lightgray"/><td/><td>Interprocess</td></tr>
+      <tr><td style="padding-left: 0px">まがない</td><td>Fiber</td><td>Thread<br/><span style="color: lightgray">Interthreads</span></td><td style="color: red; font-weight: bold">Process</td></tr>
+    </table>
+  </section>
+  <section class="slide">
+    <h2>Boost.Process</h2>
+    <ul>
+      <li>今日(!)まで2回目のレビューが行われているライブラリ</li>
+      <li>他の実行バイナリを起動したりなんやりするライブラリ
+        <ul>
+          <li>アプリケーションロジックを提供するBoost.Applicationとは違うもの</li>
+          <li>純粋に親子であったりstd(in|out|err)をパイプに繋いだり、プラットフォームが提供しているシステムコールを抽象化</li>
+          <li>要はちょー強い<code><a href="http://en.cppreference.com/w/cpp/utility/program/system">std::system</a></code>
+        </ul>
+      </li>
+    </ul>
+  </section>
+  <section class="slide">
+    <h2>Boost.Process - gnome-terminalをあげる</h2>
+    <pre class="c++">
+        <code>#include &lt;boost/process.hpp&gt;</code>
+        <code>using namespace boost::process;</code>
+        <code>int main()</code>
+        <code>{</code>
+        <code>    spawn("/usr/bin/gnome-terminal", "-x", "bash");</code>
+        <code>}</code>
+    </pre>
+  </section>
+  <section class="slide">
+    <h2>Boost.Process - 子供から見てみる</h2>
+    <pre class="c++" style="font-size: small">
+        <code>void show_pstree(char const* parent)</code>
+        <code>{</code>
+        <code>    spawn("/usr/bin/pstree", "-alpuUs", std::to_string(boost::this_process::get_id()));</code>
+        <code>    std::getchar();</code>
+        <code>}</code>
+        <code>int main(int argc, char** argv)</code>
+        <code>{</code>
+        <code>    if (argc &gt; 1)</code>
+        <code>    {</code>
+        <code>        show_pstree(argv[1]);</code>
+        <code>        return 0;</code>
+        <code>    }</code>
+        <code>    std::cout &lt;&lt; "main process"</code>
+        <code>      &lt;&lt; " : pid " &lt;&lt; boost::this_process::get_id() &lt;&lt; std::endl;</code>
+        <code>    child c("/usr/bin/xterm", "-e", argv[0], std::to_string(boost::this_process::get_id()));</code>
+        <code>    std::cout &lt;&lt; "wait for child" &lt;&lt; std::endl;</code>
+        <code>    c.join();</code>
+        <code>}</code>
+    </pre>
+  </section>
+  <section class="slide">
+    <h2>補足 Boost.Interthreads</h2>
+    <ul>
+      <li><a href="http://svn.boost.org/svn/boost/sandbox/interthreads/">Sandboxにソース等がある</a>
+        <ul><li>サマリ: https://svn.boost.org/trac/boost/wiki/LibrariesUnderConstruction#Boost.InterThreads</li></ul>
+      </li>
+      <li>主にデコレータと呼ばれるコールバックを設定できるようにするライブラリ</li>
+      <li>C++11標準やBoost.Threadそれ自身でなんとかなることが多い</li>
+    </ul>
+  </section>
+
+  <div class="progress"></div>
+  <script async src="shower/shower.min.js"></script>
+  <script async src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+  <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>
