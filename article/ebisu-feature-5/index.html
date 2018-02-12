@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+		<title>ebisu_feature.vol5</title>
 
 		<link rel="stylesheet" href="css/reveal.css">
 		<link rel="stylesheet" href="css/theme/black.css">
@@ -24,8 +24,161 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+        <section id="top">
+          <h2>std::invokeとかstd::result_ofとか</h2>
+          ebisu_feature.cpp vol.5
+        </section>
+
+        <section>
+          <section>
+            <h3>std::result_of使ってる人はどれぐらいいますか</h3>
+            <aside class="notes">いなかったら下</aside>
+          </section>
+          <section>
+            <h3>はい、今日の発表はおしまいです。</h3>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h3>std::result_ofの問題点</h3>
+            <a href="https://cplusplus.github.io/LWG/issue2927">LWG-2927</a>
+          </section>
+
+          <section>
+            <p>std::result_of_t&lt;F(A...)&gt;で、Fの実体fをf(A...)で呼び出した時の戻り値の型が得られる</p>
+            <p>Fがメンバ関数やメンバ変数ポインタの場合、第1引数をそのクラスのインスタンスとして扱う</p>
+            <pre><code data-trim data-noescape>
+using int_fuction = int(*)(int);
+std::result_of_t&lt;int_function(int)&gt; // int
+
+struct foo {
+  float operator();
+};
+std::result_of_t&lt;foo()&gt; // float
+
+using foo_member = int foo::*;
+std::result_of_t&lt;foo_member(foo)&gt; // int</code></pre>
+          </section>
+
+          <section>
+            このコードは一体何が出力される？
+            <pre><code data-trim data-noescape>
+class foo;
+using foo_bar = void (foo::*)();
+using result_type = std::result_of_t&lt;foo_bar(foo const)&gt;;
+std::cout << typeid(result_type).name() << std::endl;</code></pre>
+            <a href="https://wandbox.org/permlink/E3CIlweLEQ8jSVIx">result on wandbox</a>
+            <aside class="notes">
+              non-const member functionにconstオブジェクトを渡してるので本来呼べるのはおかしいということ
+            </aside>
+          </section>
+
+          <section>
+            <h3>本来はコンパイルエラーになるべき</h3>
+            <pre><code data-trim data-noescape>std::result_of_t&lt;foo_bar(foo const)&gt;</code></pre>は
+            <pre><code data-trim data-noescape>std::result_of_t&lt;foo_bar(foo)&gt;</code></pre>なので、
+            非constメンバ関数<pre><code data-trim data-noescape>using foo_bar = void (foo::*)() /* non-const !! */;</code></pre>が呼べてしまう
+          </section>
+
+          <section>
+            関数型をいい感じに使ってしまった結果、非参照型の引数のcv-qualifierが消えてしまう事態に
+          </section>
+
+          <section>
+            <p>標準ライブラリでもちょいちょいやらかしているのが見つかっている</p>
+            <a href="https://cplusplus.github.io/LWG/issue2017">LWG-2017</a>
+            <a href="https://cplusplus.github.io/LWG/issue2021">LWG-2021</a>
+            <a href="https://cplusplus.github.io/LWG/issue2767">LWG-2767</a>
+            <pre><code data-trim data-noescape>
+template &lt;typename F, typename... Args&gt;
+std::result_of_t&lt;F(Args...)&gt; f(F fun, Args&amp;&amp;... params) {
+    return fun(std::forward&lt;Args&gt;(params)...);
+}
+struct Functor {
+    template &lt;typename T&gt;
+    T&amp;&amp; operator()(T&amp;&amp; t) const;
+};
+int main() {
+    typedef std::string const Str;
+    f(Functor(), Str("1"));
+}</code></pre>
+          </section>
+
+          <section>
+            <pre><code data-trim data-noescape class="cpp">f(Functor(), Str("1"));</code></pre>が
+            <pre><code data-trim data-noescape>std::result_of_t&lt;Functor(std::string const)&gt;
+f(Functor fun, std::string const&amp;&amp; params)</code></pre>になって、
+            <pre><code data-trim data-noescape>std::result_of_t&lt;Functor(std::string const)&gt;</code></pre>constが消えて、
+            <pre><code data-trim data-noescape>std::string&amp;&amp; Functor::operator()(std::string&amp;&amp;)</code></pre>
+            <pre><code data-trim data-noescape>std::string&amp;&amp; f(Functor fun, std::string const&amp;&amp; params)</code></pre>
+          </section>
+
+          <section>
+            関数本体は<pre><code data-trim data-noescape class="cpp">return fun(std::forward&lt;Args&gt;(params)...);</code></pre>なので
+            <pre><code data-trim data-noescape class="cpp">return fun(std::forward&lt;std::string const&gt;(params)...);</code></pre>で、
+            こっちは<pre><code data-trim data-noescape>std::string const&amp;&amp; Functor::operator()(std::string const&amp;&amp;)</code></pre>が呼ばれるので、std::string const&amp;&amp;をstd::string&amp;&amp;で返そうとしてエラー
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h3>std::invokeとstd::is_callableとstd::result_ofの問題点</h3>
+            <a href="https://cplusplus.github.io/LWG/issue2895">LWG-2895</a>
+            <a href="https://cplusplus.github.io/LWG/issue2927">LWG-2927</a>
+          </section>
+
+          <section>
+            <h2>わかりづらい！！</h2>
+          </section>
+
+          <section>
+            C++11で<i>INVOKE</i>という疑似関数を定義してstd::function,std::bind,std::thread,...がどうやって渡された関数を呼び出すのかを規定した
+            <pre><code data-trim data-noescape class="cpp">
+std::function&lt;R(A...)&gt; f = foo; f(a...) // INVOKE(foo, a...)
+std::thread th(foo, a...); // INVOKE(foo, a...)
+std::bind(foo, _1, _2, ...)(a...) // INVOKE(foo, a...)</pre></code>
+          </section>
+
+          <section>
+            <p>で、C++17でその<i>INVOKE</i>をライブラリ関数として提供(std::invoke)しようということになった</p>
+            <p>それが呼べるかどうかわかったほうが便利では？となってstd::is_(nothrow_)callableを作ろうってなった</p>
+          </section>
+
+          <section>
+            <ul>
+              <li>関数オブジェクトを呼ぶのが<br/>std::invoke(f, args...)</li>
+              <li>関数オブジェクトが呼び出せるか調べるのが<br/>std::is_(nothrow_)callable&lt;F(Args...)&gt;</li>
+              <li>関数オブジェクトを呼び出した結果の型が<br/>std::result_of&lt;F(Args...)&gt;</li>
+            </ul>
+            <p class="fragment"><i>INVOKE</i>の規則に従うかどうかなのに、invokeだったりcallだったりresultだったりで紛らわしい</p>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            なので、ここらへん一回整理しましょうってなった
+          </section>
+
+          <section>
+            <ul>
+              <li><i>INVOKE</i>とstd::invokeはそのまま変わらず</li>
+              <li>std::is_(nothrow_)callable&lt;F(Args...)&gt;はstd::is_(nothrow_)invocable&lt;F, Args...&gt;</li>
+              <li>std::result_of&lt;F(Args...)&gt;はstd::invoke_result&lt;F, Args...&gt;</li>
+            </ul>
+            <p>全てにinvokeを入れて統一</p>
+            <p class="fragment">is_invo<mark>c</mark>able💢💢💢</p>
+          </section>
+
+          <section>
+            std::result_ofであったcv-qualifiedの問題も解決（ちゃんとエラーになる）
+            <a href="https://wandbox.org/permlink/GZqZ9KAO2NvCmWub">result on wandbox</a>
+          </section>
+
+          <section>
+            <h3>ということで、std::result_ofはC++17からdeprecatedなので、std::invoke_resultを使いましょう</h3>
+          </section>
+        </section>
 			</div>
 		</div>
 
@@ -38,8 +191,8 @@
 			// - https://github.com/hakimel/reveal.js#dependencies
 			Reveal.initialize({
 				dependencies: [
-					{ src: 'plugin/markdown/marked.js' },
-					{ src: 'plugin/markdown/markdown.js' },
+					<!-- { src: 'plugin/markdown/marked.js' }, -->
+					<!-- { src: 'plugin/markdown/markdown.js' }, -->
 					{ src: 'plugin/notes/notes.js', async: true },
 					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
 				]
