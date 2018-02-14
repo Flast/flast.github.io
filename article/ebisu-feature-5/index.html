@@ -163,7 +163,7 @@ std::bind(foo, _1, _2, ...)(a...) // INVOKE(foo, a...)</pre></code>
           <section>
             <ul>
               <li><i>INVOKE</i>とstd::invokeはそのまま変わらず</li>
-              <li>std::is_(nothrow_)callable&lt;F(Args...)&gt;はstd::is_(nothrow_)invocable&lt;F, Args...&gt;</li>
+              <li>std::is_(nothrow_)callable&lt;F(Args...)&gt;はstd::is_(nothrow_)invocable(_r)&lt;F, Args...&gt;</li>
               <li>std::result_of&lt;F(Args...)&gt;はstd::invoke_result&lt;F, Args...&gt;</li>
             </ul>
             <p>全てにinvokeを入れて統一</p>
