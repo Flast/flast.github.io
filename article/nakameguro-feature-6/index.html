@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-        <title>reveal.js</title>
+        <title>nakameguro_feature.vol6</title>
 
         <link rel="stylesheet" href="css/reveal.css">
         <link rel="stylesheet" href="css/theme/black.css">
@@ -24,8 +24,334 @@
     <body>
         <div class="reveal">
             <div class="slides">
-                <section>Slide 1</section>
-                <section>Slide 2</section>
+                <section id="top">
+                    <h2>題名のないスライド 21</h2>
+                    nakameguro_feature.vol6
+                </section>
+                <section>
+                    <h3>今日のお題</h3>
+                    <ul>
+                        <li>例外関係</li>
+                        <li>便利ライブラリ（時間があったら？）</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>例外関係</h2>
+                    <ul>
+                        <li>例外仕様を削除</li>
+                        <li>noexcept指定を型システムに組入れ</li>
+                        <li>std::uncaught_exceptions</li>
+                    </ul>
+                </section>
+                <section>
+                    <section>
+                        <h3>例外仕様を削除</h3>
+                        <em>noexcept指定</em>と<em>例外仕様</em>は微妙に違うので注意
+                    </section>
+                    <section>
+                        <pre><code data-trim data-noescape class="cpp">
+void foo() throw(std::runtime_error, std::ios::failure)
+        // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        // これ</code></pre>
+                        C++11ですでに非推奨となっていたが、<br>C++17でついぞ消された
+                    </section>
+                    <section>
+                        なので、堂々と<p><em>「Javaはまだ例外仕様とか使ってんのwwww」</em></p>とdisれる
+                    </section>
+                    <section>
+                        ただし、
+                        <pre><code data-trim data-noescape class="cpp">
+void foo() throw()
+        // ^^^^^^^
+        // これ</code></pre>
+                        は例外仕様<strong>ではない</strong>ので、削除されていない<br>（ただしC++20で消える）
+                    </section>
+                    <section>
+                        例外仕様が削除されたので、必然<br>
+                        <ul>
+                            <li>std::unexpected</li>
+                            <li>std::get_unexpected</li>
+                            <li>std::set_unexpected</li>
+                        </ul><br>
+                        も削除された
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h3>noexcept指定を型システムに組入れ</h3>
+                    </section>
+                    <section>
+                        C++11で追加されたnoexcept指定を型に組入れるようにした
+                    </section>
+                    <section>
+                        まずnoexcept指定とは
+                        <pre><code data-trim data-noescape class="cpp">
+void foo() noexcept
+        // ^^^^^^^^
+        // これとか
+void foo() noexcept(true) // void foo() noexcept と同義
+        // ^^^^^^^^
+        // これとか
+void foo() noexcept(false) // void foo() と同義
+        // ^^^^^^^^
+        // これ</code></pre>
+                    </section>
+                    <section>
+                        だけではなく、実は
+                        <pre><code data-trim data-noescape class="cpp">
+void foo() throw() // void foo() noexcept と同義
+        // ^^^^^^^
+        // これ</code></pre>
+                        もnoexcept指定
+                    </section>
+                    <section>
+                        型システムに組入れられる前は全て同じ型の関数ポインタへ変換されていた
+                        <pre><code data-trim data-noescape class="cpp">
+void foo() noexcept;
+void bar();
+auto fp = &amp;foo; // void (*)()
+fp = &amp;bar; // 合法</code></pre>
+                    </section>
+                    <section>
+                        一方C++17からは型シグネチャの中にnoexceptが含まれるようになっている
+                        <pre><code data-trim data-noescape class="cpp">
+void foo() noexcept;
+void (*nefp)() noexcept = &amp;foo; // 例外を投げない
+
+void bar();
+void (*efp)() = &amp;bar; // 例外を投げうる</code></pre>
+                    </section>
+                    <section>
+                        これはcv-qualifierに似た互換規則があり、
+                        <ol>
+                            <li>例外を投げない関数ポインタに例外を投げ<em>うる</em>関数ポインタは代入できない</li>
+                            <li>例外を投げ<em>うる</em>関数ポインタに例外を投げない例外ポインタは代入できる</li>
+                        </ol>
+                        <pre><code data-trim data-noescape class="cpp">
+void foo() noexcept;
+void bar();
+
+auto nefp = &amp;foo; // void (*)() noexcept
+nefp = &amp;bar; // 違法
+
+auto efp = &amp;bar; // void (*)()
+efp = &amp;foo; // 合法</code></pre>
+                    </section>
+                    <section>
+                        これはラムダ式にも適用される
+                        <pre><code data-trim data-noescape class="cpp">
+void (*nefp)() noexcept = []() noexcept {};
+void (*efp)() = []{};
+
+nefp = []{}; // 違法
+efp = []() noexcept {}; // 合法</code></pre>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h3>std::uncaught_exceptions</h3>
+                        今現在投げられて、捕まえられていない例外の<strong>数</strong>を返す
+                    </section>
+                    <section>
+                        元々std::uncaught_exceptionという関数があったが、これは捕まえられていない例外の有無しかわからなかった<br>（C++20で削除）
+                    </section>
+                    <section>
+                        が、dtor中では補足されていない例外が複数になる場合がある<br>
+                        長いので<a href="https://wandbox.org/permlink/WEUTdkbhfs5Aj5TV">wandbox</a>へ
+                    </section>
+                    <section>
+                        実際の使用例としてよく挙げられるのがdtorで処理をするscope exit系のオブジェクト<br>
+                        ctorで記録した数とdtorでの数が一致していなければ例外処理中なので、予定していた処理を実行しないようにする
+                    </section>
+                    <section>
+                        Boost.Logでは
+                        <pre><code data-trim data-noescape class="cpp">
+BOOST_LOG(logger) &lt;&lt; foo() &lt;&lt; bar();</code></pre>
+                        でbarが例外を投げた場合には出力が完成していないので、何も出してほしくないので、残っている例外の数を見て一致しなければ何も出力しないようにしている
+                    </section>
+                </section>
+                <section>
+                    <h2>属性関係</h2>
+                    <ul>
+                        <li>名前空間と列挙子の属性</li>
+                        <li>属性の名前空間の省略</li>
+                        <li>知らないやつは無視</li>
+                        <li>追加された属性</li>
+                    </ul>
+                </section>
+                <section>
+                    <section>
+                        <h3>名前空間と列挙子の属性</h3>
+                    </section>
+                    <section>
+                        <pre><code data-trim data-noescape class="cpp">
+namespace [[/* ここ */]] N {
+    enum [[/* ここはC++11から */]] E {
+    {
+        a [[/* ここ */]]
+    };
+}</code></pre>
+                    </section>
+                    <section>
+                        ちなみに
+                        <pre><code data-trim data-noescape class="cpp">
+namespace A::B::C { }</code></pre>
+                        には属性をつけられません<br>（どの名前空間に付けたらいいかわからないから）
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h3>属性の名前空間の省略</h3>
+                    </section>
+                    <section>
+                        属性は名前空間を持つことがあります
+                        <pre><code data-trim data-noescape class="cpp">
+void* my_malloc(size_t) [[gnu::malloc, gnu::alloc_size(1),
+                          clang::no_sanitize_memory]];</code></pre>
+                        何度も名前空間を書く場合には名前空間を指定して省略させることが出来ます
+                    </section>
+                    <section>
+                        <pre><code data-trim data-noescape class="cpp">
+void* my_malloc(size_t) [[using gnu: malloc, alloc_size(1)]]
+                       // ^^^^^^^^^^
+                       // これ
+                        [[clang::no_sanitize_memory]];
+                        </code></pre>
+                        が、指定した名前空間以外の属性を扱うことが出来ない（グローバル名前空間であっても）ので、かえって冗長になる気がします
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h3>知らないやつは無視</h3>
+                    </section>
+                    <section>
+                        そのまんまです
+                        <pre><code data-trim data-noescape class="cpp">
+void foo() [[orenokanngaetasaiyounozokusei]];
+          // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          // コンパイラは絶対無視（エラーになってはいけない）</code></pre>
+                    </section>
+                </section>
+                <section>
+                    <h3>追加された属性</h3>
+                    <ul>
+                        <li>fallthrough</li>
+                        <li>maybe_unused</li>
+                        <li>nodiscard</li>
+                    </ul>
+                </section>
+                <section>
+                    <section>
+                        <h3>fallthrough</h3>
+                        空文につける属性<br>（空文に属性をつけることが出来るのをgrammarから見つけられてないのが悔しい）
+                    </section>
+                    <section>
+                        switch-caseでbreakしないcaseに付けることで警告を抑制できる
+                        <pre><code data-trim data-noescape class="cpp">
+switch (condition)
+{
+    case A:
+        // ...
+        // 大体のコンパイラで警告が飛ぶ
+
+    case B:
+        // ...
+        [[fallthrough]]; // 警告を抑制
+
+    case C:
+        // ...
+        break;
+}</code></pre>
+                    </section>
+                </section>
+                <section>
+                    <h3>maybe_unused</h3>
+                    いろんなコンパイラにあるunused属性の標準化
+                </section>
+                <section>
+                    <section>
+                        <h3>nodiscard</h3>
+                        関数戻り値を受けてない場合に警告
+                    </section>
+                    <section>
+                        リソースを扱う関数の場合、戻り値のポインタとかハンドルを適切に処理しないといけない<br>
+                        →つまり戻り値をそのまま棄ててるのはなにかおかしい
+                    </section>
+                    <section>
+                        <pre><code data-trim data-noescape class="cpp">
+malloc(sizeof(int) * 10); // 警告なし
+    // だけどallocしたポインタ棄ててるのはおかしいよね？
+
+void* my_alloc(size_t) [[nodiscard]];
+my_alloc(sizeof(int) * 10); // 警告</code></pre>
+                        関数側に付けることで棄てられたら困るものを返しているのを明示
+                    </section>
+                    <section>
+                        いくつかの標準ライブラリ関数にも付けられたが、ここでは割愛<br><small>（と書いておけば調べるのが面倒だったのをごまかせるはず）</small>
+                    </section>
+                </section>
+                <section>
+                    （自分で作るのも別に難しくないけど）
+                    <h2>便利ライブラリ</h2>
+                    <ul>
+                        <li>std::void_t</li>
+                        <li>std::as_const</li>
+                    </ul>
+                </section>
+                <section>
+                    <section>
+                        <h3>std::void_t</h3>
+                        ちょーべんり
+                    </section>
+                    <section>
+                        とにかくvoidを返すテンプレート
+                        <pre><code data-trim data-noescape class="cpp">
+template &lt;typename...&gt;
+using void_t = void;</code></pre>
+                        どう見ても便利
+                    </section>
+                    <section>
+                        これはクラステンプレートのSFINAEをする場合にかなりいい具合
+                        <pre><code data-trim data-noescape class="cpp">
+template &lt;typename... T, typename = void&gt;
+class awesome_class
+{
+    // ...
+};
+
+template &lt;typename... T&gt;
+class awesome_class&lt;T...,
+    std::void_t&lt;typename T::value_type...&gt;&gt;
+{
+    // ...
+};</pre></code>
+                    </section>
+                    <section>
+                        C++14までで実装しようとすると罠があるので注意
+                        <a href="https://wg21.link/cwg1558">CWG 1558</a>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h3>std::as_const</h3>
+                    </section>
+                    <section>
+                        左辺値参照を受け取ってconstな左辺値参照で返す
+                        <pre><code data-trim data-noescape class="cpp">
+template &lt;typename T&gt;
+constexpr std::add_const_t&lt;T&gt;&amp; as_const(T&amp; value) noexcept
+{
+    return value;
+}</code></pre>
+                    </section>
+                    <section>
+                        オーバーロードで挙動が変わる様な場合、勝手にmoveされそうな場合、等々、、非constなオブジェクトを強制的にconstで扱わせることが出来る
+                    </section>
+                    <section>
+                        地味に便利だけど、地味過ぎてぱっとユースケースが出てこない<br>
+                        でも、こう、decltypeとかするときに欲しくなることがある
+                    </section>
+                </section>
             </div>
         </div>
 
