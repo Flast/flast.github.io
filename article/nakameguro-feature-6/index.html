@@ -206,17 +206,18 @@ namespace A::B::C { }</code></pre>
                     <section>
                         属性は名前空間を持つことがあります
                         <pre><code data-trim data-noescape class="cpp">
-void* my_malloc(size_t) [[gnu::malloc, gnu::alloc_size(1),
-                          clang::no_sanitize_memory]];</code></pre>
+[[gnu::malloc, gnu::alloc_size(1),
+  clang::no_sanitize_memory]]
+void* my_malloc(size_t);</code></pre>
                         何度も名前空間を書く場合には名前空間を指定して省略させることが出来ます
                     </section>
                     <section>
                         <pre><code data-trim data-noescape class="cpp">
-void* my_malloc(size_t) [[using gnu: malloc, alloc_size(1)]]
-                       // ^^^^^^^^^^
-                       // これ
-                        [[clang::no_sanitize_memory]];
-                        </code></pre>
+ [[using gnu: malloc, alloc_size(1)]]
+// ^^^^^^^^^^
+// これ
+[[clang::no_sanitize_memory]]
+void* my_malloc(size_t);</code></pre>
                         が、指定した名前空間以外の属性を扱うことが出来ない（グローバル名前空間であっても）ので、かえって冗長になる気がします
                     </section>
                 </section>
@@ -227,9 +228,9 @@ void* my_malloc(size_t) [[using gnu: malloc, alloc_size(1)]]
                     <section>
                         そのまんまです
                         <pre><code data-trim data-noescape class="cpp">
-void foo() [[orenokanngaetasaiyounozokusei]];
-          // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-          // コンパイラは絶対無視（エラーになってはいけない）</code></pre>
+ [[orenokanngaetasaiyounozokusei]] void foo();
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+// コンパイラは絶対無視（エラーになってはいけない）</code></pre>
                     </section>
                 </section>
                 <section>
@@ -282,7 +283,7 @@ switch (condition)
 malloc(sizeof(int) * 10); // 警告なし
     // だけどallocしたポインタ棄ててるのはおかしいよね？
 
-void* my_alloc(size_t) [[nodiscard]];
+[[nodiscard]] void* my_alloc(size_t);
 my_alloc(sizeof(int) * 10); // 警告</code></pre>
                         関数側に付けることで棄てられたら困るものを返しているのを明示
                     </section>
