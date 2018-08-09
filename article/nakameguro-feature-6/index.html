@@ -146,6 +146,30 @@ void (*efp)() = []{};
 nefp = []{}; // 違法
 efp = []() noexcept {}; // 合法</code></pre>
                     </section>
+                    <section>
+                        型システムに入っているので、オーバーロード解決やテンプレートの推論に使える<br>
+                        <em>オーバーロードできるという意味ではないので注意</em>
+                        <pre><code data-trim data-noescape class="cpp">
+void foo() noexcept;
+void foo(); // エラー</code></pre>
+                    </section>
+                    <section>
+                        オーバーロード解決
+                        <pre><code data-trim data-noescape class="cpp">
+void foo(void (*fp)() noexcept); // 1
+void foo(void (*fp)()); // 2
+
+foo([]{}); // call 2
+foo([]() noexcept {}); // call 1</code></pre>
+
+                        テンプレート引数推論
+                        <pre><code data-trim data-noescape class="cpp">
+template &lt;bool NE&gt;
+void bar(void (*fp)() noexcept(NE));
+
+bar([]{}); // NE == false
+bar([]() noexcept {}) // NE == true</code></pre>
+                    </section>
                 </section>
                 <section>
                     <section>
