@@ -84,13 +84,13 @@ document.getElementsByTagName( 'head' )[0].appendChild( link );
                         <h3>INVOKEの規格上での使われ方</h3>
                         <p>基本的に以下の2通り</p>
                         <ul>
-                            <li>INVOKE(std::forward<F>(f), std::forward<Args>(args)...)</li>
+                            <li>INVOKE(std::forward&lt;F&gt;(f), std::forward&lt;Args&gt;(args)...)</li>
                             <li>INVOKE(DECAY_COPY(f), DECAY_COPY(args)...)</li>
                         </ul>
                     </section>
                     <section>
                         <h3>forwardの方</h3>
-                        <small>INVOKE(std::forward<F>(f), std::forward<Args>(args)...)</small>
+                        <small>INVOKE(std::forward&lt;F&gt;(f), std::forward&lt;Args&gt;(args)...)</small>
                         <ul>
                             <li>関数を渡したらすぐその場で実行されるような場合</li>
                             <li>その場で呼ばれるなら参照/moveで渡されたほうがコストが低い</li>
