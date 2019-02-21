@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <title>nakameguro_feature.vol16</title>
+
+        <link rel="stylesheet" href="css/reveal.css">
+        <link rel="stylesheet" href="css/theme/black.css">
+
+        <!-- Theme used for syntax highlighting of code -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <!-- Printing and PDF exports -->
+        <script>
+            var link = document.createElement( 'link' );
+link.rel = 'stylesheet';
+link.type = 'text/css';
+link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+document.getElementsByTagName( 'head' )[0].appendChild( link );
+        </script>
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section id="top">
+                    <h2>なんとか（当日までに考える）</h2>
+                    nakameguro_feature.vol16
+                </section>
+                <section>
+                    <h3>今日のお題</h3>
+                    <ul>
+                        <li>std::invokeとはなんぞや</li>
+                        <li>ebisu_feature.cpp vol5のおさらい</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>std::invokeとはなんぞや</h2>
+                    <ul>
+                        <li>C++11で規定された<b><i>INVOKE</i></b>という動作をライブラリ化したもの</li>
+                    </ul>
+                </section>
+                <section>
+                    <section>
+                        <h3>INVOKEとはなんぞや</h3>
+                        <ul>
+                            <li>関数ちっくな何かを実行するときの共通化された手続き</li>
+                            <li>標準ライブラリの内部でのみ参照され、挙動の一貫した標準ライブラリを提供するために使われた</li>
+                            <li>仕様上の要求は次の通り</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <p>INVOKE(f, t1, t2, ..., tN)を次のように定義する</p>
+                        <ul>
+                            <small>
+                                <li>fがメンバ関数ポインタで、t1がオブジェクトへの参照の場合、(t1.*f)(t2, ..., tN)を呼び出す</li>
+                                <li>fがメンバ関数ポインタで、t1がstd::referrence_wrapperの場合、(t1.get().*f)(t2, ..., tN)を呼び出す</li>
+                                <li>fがメンバ関数ポインタで、t1が上記2つにマッチしない場合、<br>((*t1).*f)(t2, ..., tN)を呼び出す</li>
+                                <li>fがメンバ変数ポインタで、N==1かつt1がオブジェクトへの参照の場合、t1.*fにアクセスする</li>
+                                <li>fがメンバ変数ポインタで、N==1かつt1がstd::referrence_wrapperの場合、<br>t1.get().*fにアクセスする</li>
+                                <li>fがメンバ変数ポインタで、N==1かつt1が上記2つにマッチしない場合、<br>(*t1).*fにアクセスする</li>
+                                <li>それ以外はf(t1, t2, ..., tN)を呼び出す</li>
+                            </small>
+                        </ul>
+                        これだけ
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h3>INVOKEが規格上出現する場面(一部)</h3>
+                        <p>
+                            std::apply /
+                            std::visit /
+                            std::reference_wrapper /
+                            std::bind /
+                            std::function /
+                            std::thread /
+                            std::async
+                        </p>
+                        <small>基本的に関数っぽい何かを作るやつと、関数になにかしたいやつらが使ってる</small>
+                    </section>
+                    <section>
+                        <h3>INVOKEの規格上での使われ方</h3>
+                        <p>基本的に以下の2通り</p>
+                        <ul>
+                            <li>INVOKE(std::forward<F>(f), std::forward<Args>(args)...)</li>
+                            <li>INVOKE(DECAY_COPY(f), DECAY_COPY(args)...)</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>forwardの方</h3>
+                        <small>INVOKE(std::forward<F>(f), std::forward<Args>(args)...)</small>
+                        <ul>
+                            <li>関数を渡したらすぐその場で実行されるような場合</li>
+                            <li>その場で呼ばれるなら参照/moveで渡されたほうがコストが低い</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>DECAY_COPYの方</h3>
+                        <small>INVOKE(DECAY_COPY(f), DECAY_COPY(args)...)</small>
+                        <ul>
+                            <li>そもそもDECAY_COPYとは次のような関数
+                                <pre><code data-trim data-noescape class="cpp">
+template&lt;class T&gt; decay_t&lt;T&gt; decay_copy(T&amp;&amp; v)
+{ return std::forward&lt;T&gt;(v); }
+                                </code></pre>
+                                <small>関数として書いてるっぽいんだけど、ライブラリ関数にはなってなさそう...?</small>
+                            </li>
+                            <li>関数や引数を渡してもいつ実行されるかわからないような場合</li>
+                            <li>スレッドとかに参照を渡してしまうとdangling referenceになってしまう恐れがある</li>
+                        </ul>
+                    </section>
+                </section>
+                <section>
+                    <h2>ebisu_feature.cpp vol5のおさらい</h2>
+                    <a href="../ebisu-feature-5/index.html">スライドはこちら</a>
+                </section>
+            </div>
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.js"></script>
+
+        <script>
+            // More info about config & dependencies:
+            // - https://github.com/hakimel/reveal.js#configuration
+            // - https://github.com/hakimel/reveal.js#dependencies
+            Reveal.initialize({
+                dependencies: [
+                    { src: 'plugin/markdown/marked.js' },
+                    { src: 'plugin/markdown/markdown.js' },
+                    { src: 'plugin/notes/notes.js', async: true },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+                ]
+            });
+        </script>
+    </body>
+</html>
