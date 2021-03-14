@@ -12,6 +12,7 @@
 
   <script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
   <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+  <script src="//unpkg.com/vue@3/dist/vue.global.prod.js"></script>
 
 </head>
 
@@ -84,26 +85,14 @@
         <section id="briefing-papers">
           <h3 class="page-header">発表資料 / Briefing Papers</h3>
           <ul>
-            <li><a href="https://www.slideshare.net/freedom404/boost9-session">並行・並列へのC++としてのアプローチ</a> - <a href="https://boostjp.github.io/study_meeting/study9">Boost.勉強会 #9 つくば</a></li>
-            <li><a href="./article/boost-15-sapporo/index.html">オーブンレンジ2014夏モデル</a> - <a href="https://boostjp.github.io/study_meeting/study15">Boost.勉強会 #15 札幌</a></li>
-            <li><a href="./article/boost-16-osaka/index.html">便利！電動歯ブラシ</a> - <a href="https://boostjp.github.io/study_meeting/study16">Boost.勉強会 #16 大阪</a></li>
-            <li><a href="./article/boost-19-tokyo/index.html">Boost.ConfigとSG10と</a> - <a href="https://boostjp.github.io/study_meeting/study19">Boost.勉強会 #19 東京</a></li>
-            <li><a href="./article/meetup-app1/index.html">明日から使える（かは分からない）Qt</a> - <a href="http://meetupapp.connpass.com/event/33555/">meetup app tokyo@1</a></li>
-            <li><a href="./article/boost-20-tokyo/index.html">Boost.Fusion/Phoenixのメンテナになったのでその記念的ななにか</a> - <a href="https://boostjp.github.io/study_meeting/study20">Boost.勉強会 #20 東京</a></li>
-            <li><a href="./article/boost-21-sapporo/index.html">Boost.Fusion/Phoenixのメンテナになったのでその記念的ななにか in 札幌</a> - <a href="https://boostjp.github.io/study_meeting/study21">Boost.勉強会 #21 札幌</a></li>
-            <li><a href="./article/ebisu-feature-5/index.html">std::invokeとかstd::result_ofとか</a> - <a href="https://ebisu-effective-modern-cpp.connpass.com/event/79032/">ebisu_feature.cpp vol.5</a></li>
-            <li><a href="./article/nakameguro-feature-6/index.html">題名のないスライド21</a> - <a href="https://ebisu-effective-modern-cpp.connpass.com/event/96872/">nakameguro_feature.cpp vol.6</a></li>
-            <li><a href="./article/nakameguro-feature-16/index.html">なんとか（当日までに考える）</a> - <a href="https://ebisu-effective-modern-cpp.connpass.com/event/119907/">nakameguro_feature.cpp vol.16</a></li>
+            <paper-list v-for="item in list" :paper="item" />
           </ul>
         </section>
 
         <section id="study-group-without-review">
           <h3 class="page-header">研究会(査読なし) / Study Group (w/o review)</h3>
           <ul>
-            <li>
-              高橋航平，塙敏博，朴泰祐，児玉祐悦，扇谷豪，佐藤三久. 各種アプリケーションにおけるGPGPU対Many Core Processorの性能比較. 情報処理学会研究報告, 2013-HPC-139(21), pp.1-7, May/2013.
-              [<a href="https://ipsj.ixsq.nii.ac.jp/ej/?action=pages_view_main&active_action=repository_view_main_item_detail&item_id=92465&item_no=1&page_id=13&block_id=8">IPSJ電子図書館</a>]
-            </li>
+            <paper-list v-for='item in list' :paper="item" />
           </ul>
         </section>
 
@@ -115,42 +104,21 @@
             </li>
           </ul>
         </section>
-        
+
         <section id="publications">
           <h3 class="page-header">出版物 / Publications</h3>
           <ul>
-            <li>
-              高橋航平(著), επιστημη(監修). 独習C++ 新版, 翔泳社, Nov/2019, <a href="https://www.shoeisha.co.jp/book/detail/9784798150239">https://www.shoeisha.co.jp/book/detail/9784798150239</a>.
-            </li>
+            <book-list v-for='item in list' :book="item" />
           </ul>
         </section>
 
         <section id="qualifications">
           <h3 class="page-header">資格・免許 / Qualifications, Licenses</h3>
           <table class="table table-striped table-condensed">
-            <tr><th>12/Jun/2006</th><td>パソコン検定協会主催 パソコン検定試験 P検2006 - 準2級 合格<br/>Personal &amp; Professional Computing Skills Test - Pre 2nd Grade</td></tr>
-            <tr><th>26/Jan/2007</th><td>パソコン検定協会主催 パソコン検定試験 P検2006 - 2級 合格<br/>Personal &amp; Professional Computing Skills Test - 2nd Grade</td></tr>
-            <tr><th>15/Mar/2007</th><td>パソコン検定協会主催 パソコン検定試験 P検2006 - 準1級 合格<br/>Personal &amp; Professional Computing Skills Test - Pre 1st Grade</td></tr>
-            <tr><th>11/May/2007</th><td>情報処理技術者試験 初級システムアドミニストレータ試験 合格</td></tr>
-            <tr><th>13/Jul/2007</th><td>航空特殊無線技士 免許 取得</td></tr>
-            <tr><th>17/Dec/2007</th><td>情報処理技術者試験 ソフトウェア開発技術者試験 合格</td></tr>
-            <tr><th>16/May/2008</th><td>情報処理技術者試験 基本情報技術者試験 合格</td></tr>
-            <tr><th>28/Jul/2008</th><td>パソコン検定協会主催 P検1級 合格<br/>ICT Proficiency Assessment - 1st Grade</td></tr>
-            <tr><th>29/Jan/2009</th><td>第二級陸上特殊無線技士 免許 取得</td></tr>
-            <tr><th>12/Oct/2018</th><td>危険物取扱者 乙種第4類 免許 取得</td></tr>
-            <tr><th>26/Oct/2018</th><td>鉛作業主任者技能講習 修了</td></tr>
-            <tr><th>10/Jan/2019</th><td>危険物取扱者 乙種第2類 免許 取得</td></tr>
-            <tr><th>10/Jan/2019</th><td>危険物取扱者 乙種第5類 免許 取得</td></tr>
-            <tr><th>17/Jan/2019</th><td>エックス線作業主任者 免許 取得</td></tr>
-            <tr><th>25/Jan/2019</th><td>有機溶剤作業主任者技能講習 修了</td></tr>
-            <tr><th>19/Feb/2019</th><td>危険物取扱者 乙種第1類 免許 取得</td></tr>
-            <tr><th>19/Feb/2019</th><td>危険物取扱者 乙種第6類 免許 取得</td></tr>
-            <tr><th>19/Mar/2019</th><td>危険物取扱者 乙種第3類 免許 取得</td></tr>
-            <tr><th>19/Mar/2019</th><td>危険物取扱者 乙種第3類 免許 取得</td></tr>
-            <tr><th>18/Apr/2019</th><td>消防設備士 乙種第4類 免許 取得</td></tr>
-            <tr><th>14/Aug/2019</th><td>毒物劇物取扱者試験 合格</td></tr>
-            <tr><th>19/Aug/2019</th><td>第一級小型船舶操縦免許 取得</td></tr>
-            <tr><th>20/Sep/2019</th><td>高圧ガス移動監視者講習(一般) 修了</td></tr>
+            <tr v-for="item in list">
+              <th v-is="'qual-date'" :qual="item"></th>
+              <td v-is="'qual-title'" :qual="item"></td>
+            </tr>
           </table>
         </section>
       </div>
@@ -170,6 +138,7 @@
       <div class="col-md-2"></div> <!-- margin -->
     </div>
   </div>
+  <script src="./script.js" type=module></script>
 
 </body>
 </html>
