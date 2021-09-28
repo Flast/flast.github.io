@@ -148,7 +148,9 @@ const Qualifications = Vue.createApp({
         { title: '高圧ガス移動監視者講習(一般) 修了',
           date: '20/Sep/2019' },
         { title: '玉掛け技能講習 修了',
-          date: '07/Aug/2021' }
+          date: '07/Aug/2021' },
+        { title: '発破技士 免許 取得',
+          date: '22/Sep/2021' }
       ]
     }
   }
