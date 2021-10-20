@@ -150,7 +150,9 @@ const Qualifications = Vue.createApp({
         { title: '玉掛け技能講習 修了',
           date: '07/Aug/2021' },
         { title: '発破技士 免許 取得',
-          date: '22/Sep/2021' }
+          date: '22/Sep/2021' },
+        { title: '消防設備士 乙種第7類 免許 取得',
+          date: '19/Oct/2021' }
       ]
     }
   }
