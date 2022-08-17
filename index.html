@@ -1,77 +1,64 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE-edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <title>Flast | Kohei Takahashi</title>
 
-  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-
-  <script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
-  <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-  <script src="//unpkg.com/vue@3/dist/vue.global.prod.js"></script>
-  <script src="./script.js" type="module"></script>
-
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 </head>
 
 <body style="padding-top: 50px">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script src="./script.js" type="module"></script>
 
-  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
+  <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">www.flast.jp</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="http://www.flast.jp/">www.flast.jp</a>
-      </div>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav navbar-nav-scroll mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">Twitter</a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="https://twitter.com/Flast_RO">@Flast_RO</a>
+            <a class="dropdown-item" href="https://twitter.com/Flast_NET">@Flast_NET</a>
+          </div>
+        </li>
 
-      <div class="collapse navbar-collapse" id="navbar-collapse">
-        <ul class="nav navbar-nav">
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Twitter<span class="caret"/></a>
-            <ul class="dropdown-menu">
-              <li><a href="https://twitter.com/Flast_RO">@Flast_RO</a></li>
-              <li><a href="https://twitter.com/Flast_NET">@Flast_NET</a></li>
-            </ul>
-          </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">Repo</a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="https://github.com/Flast">GitHub</a>
+            <a class="dropdown-item" href="https://bitbucket.org/Flast">Bitbucket</a>
+            <a class="dropdown-item" href="https://launchpad.net/~flast">Launchpad</a>
+          </div>
+        </li>
 
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Repo<span class="caret"/></a>
-            <ul class="dropdown-menu">
-              <li><a href="https://github.com/Flast">GitHub</a></li>
-              <li><a href="https://bitbucket.org/Flast">Bitbucket</a></li>
-              <li><a href="https://launchpad.net/~flast">Launchpad</a></li>
-            </ul>
-          </li>
-
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Blog<span class="caret"/></a>
-            <ul class="dropdown-menu">
-              <li><a href="http://flast.hateblo.jp">Programming</a></li>
-              <li><a href="http://flast-net.hateblo.jp">Networking</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">Blog</a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="http://flast.hateblo.jp">Programming</a>
+            <a class="dropdown-item" href="http://flast-net.hateblo.jp">Networking</a>
+          </div>
+        </li>
+      </ul>
     </div>
   </nav>
 
   <div class="container">
     <div class="row">
-      <div class="col-md-2"></div> <!-- margin -->
+      <div class="col-md-1"></div> <!-- margin -->
 
-      <div class="col-md-6" id="top">
-        <section id="author">
-          <h3 class="page-header">About Author</h3>
-          <table class="table table-striped table-condensed">
+      <div class="col-md-8" id="top">
+        <section class="my-3" id="author">
+          <h3 class="border-bottom pb-3">About Author</h3>
+          <table class="table table-striped table-sm">
             <tr><th>H/N</th><td>Flast</td></tr>
             <tr><th>Name</th><td><a href="http://en.glyphwiki.org/wiki/u9ad9">高</a><a href="http://en.glyphwiki.org/wiki/u6a4b-itaiji-001">橋</a> 航平 (Kohei Takahashi)</td></tr>
             <tr><th>Location</th><td>東京(Tokyo), 日本(Japan)</td></tr>
@@ -83,22 +70,22 @@
           </table>
         </section>
 
-        <section id="briefing-papers">
-          <h3 class="page-header">発表資料 / Briefing Papers</h3>
+        <section class="my-3" id="briefing-papers">
+          <h3 class="border-bottom pb-3">発表資料 / Briefing Papers</h3>
           <ul>
             <paper-list v-for="item in list" :paper="item" />
           </ul>
         </section>
 
-        <section id="study-group-without-review">
-          <h3 class="page-header">研究会(査読なし) / Study Group (w/o review)</h3>
+        <section class="my-3" id="study-group-without-review">
+          <h3 class="border-bottom pb-3">研究会(査読なし) / Study Group (w/o review)</h3>
           <ul>
             <paper-list v-for='item in list' :paper="item" />
           </ul>
         </section>
 
-        <section id="documentations">
-          <h3 class="page-header">ドキュメント / Documantations</h3>
+        <section class="my-3" id="documentations">
+          <h3 class="border-bottom pb-3">ドキュメント / Documantations</h3>
           <ul>
             <li>
               <a href="http://www.flast.jp/boost-range/">Boost.Range 2.0 with Extension</a>
@@ -106,16 +93,16 @@
           </ul>
         </section>
 
-        <section id="publications">
-          <h3 class="page-header">出版物 / Publications</h3>
+        <section class="my-3" id="publications">
+          <h3 class="border-bottom pb-3">出版物 / Publications</h3>
           <ul>
             <book-list v-for='item in list' :book="item" />
           </ul>
         </section>
 
-        <section id="qualifications">
-          <h3 class="page-header">資格・免許 / Qualifications, Licenses</h3>
-          <table class="table table-striped table-condensed">
+        <section class="my-3" id="qualifications">
+          <h3 class="border-bottom pb-3">資格・免許 / Qualifications, Licenses</h3>
+          <table class="table table-striped table-sm">
             <tr v-for="item in list">
               <th v-is="'qual-date'" :qual="item"></th>
               <td v-is="'qual-title'" :qual="item"></td>
@@ -125,20 +112,19 @@
       </div>
 
       <div class="col-md-2">
-        <ul class="nav nav-list">
-          <li><a href="#author">About Author</a></li>
-          <li class="nav-header">activity</li>
-          <li><a href="#briefing-papers">発表資料</a></li>
-          <li><a href="#study-group-without-review">研究会(査読なし)</a></li>
-          <li><a href="#documentations">ドキュメント</a></li>
-          <li><a href="#publications">出版物</a></li>
-          <li><a href="#qualifications">資格・免許</a></li>
+        <ul class="nav flex-column">
+          <li class="nav-item"><a class="nav-link" href="#author">About Author</a></li>
+          <li class="nav-item">activity</li>
+          <li class="nav-item"><a class="nav-link" href="#briefing-papers">発表資料</a></li>
+          <li class="nav-item"><a class="nav-link" href="#study-group-without-review">研究会(査読なし)</a></li>
+          <li class="nav-item"><a class="nav-link" href="#documentations">ドキュメント</a></li>
+          <li class="nav-item"><a class="nav-link" href="#publications">出版物</a></li>
+          <li class="nav-item"><a class="nav-link" href="#qualifications">資格・免許</a></li>
         </ul>
       </div>
 
-      <div class="col-md-2"></div> <!-- margin -->
+      <div class="col-md-1"></div> <!-- margin -->
     </div>
   </div>
-
 </body>
 </html>
