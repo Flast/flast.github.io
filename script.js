@@ -152,7 +152,9 @@ const Qualifications = Vue.createApp({
         { title: '発破技士 免許 取得',
           date: '22/Sep/2021' },
         { title: '消防設備士 乙種第7類 免許 取得',
-          date: '19/Oct/2021' }
+          date: '19/Oct/2021' },
+        { title: '特定化学物質及び四アルキル鉛等作業主任者講習 修了',
+          date: '02/Feb/2024' }
       ]
     }
   }
