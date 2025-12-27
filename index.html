@@ -142,8 +142,8 @@
           <h3 class="border-bottom pb-3">資格・免許 / Qualifications, Licenses</h3>
           <table class="table table-striped table-sm">
             <tr v-for="item in list">
-              <th v-is="'qual-date'" :qual="item"></th>
-              <td v-is="'qual-title'" :qual="item"></td>
+              <th is="vue:qual-date" :qual="item"></th>
+              <td is="vue:qual-title" :qual="item"></td>
             </tr>
           </table>
         </section>
