@@ -42,6 +42,10 @@ const BriefingPapers = Vue.createApp({
           link: './article/nakameguro-feature-16/index.html',
           conference: 'nakameguro_feature.cpp vol.16',
           conference_link: 'https://ebisu-effective-modern-cpp.connpass.com/event/119907/' },
+        { title: '書籍『独習C++』の改訂について (仮)',
+          link: 'https://docs.google.com/presentation/d/1dfJ537pkSwYYRai4mktlAoHwNnqmnOUqfmQiVjDJClY/preview',
+          conference: 'C++MIX #6',
+          conference_link: 'https://cppmix.connpass.com/event/150527/' },
       ]
     }
   }
