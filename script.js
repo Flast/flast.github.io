@@ -1,3 +1,60 @@
+const KeikenchiDetail = Vue.createApp({
+  data() {
+    return {
+      list: [
+        { name: "北海道",   score: 30,  url: "https://uub.jp/k.cgi/1/zfziyodqfdriqtfnSiuIipociwziqIirrzfu/" },
+        { name: "青森県",   score: 12,  url: "https://uub.jp/k.cgi/2/zixdqiuzezfteziwziqnfy/" },
+        { name: "岩手県",   score: 12,  url: "https://uub.jp/k.cgi/3/dqiqzfzezenezziponfv/" },
+        { name: "宮城県",   score: 15,  url: "https://uub.jp/k.cgi/4/fzfzfzfnfniqzivdrivdqx/" },
+        { name: "秋田県",   score: 14,  url: "https://uub.jp/k.cgi/5/IftziuceIiplq/" },
+        { name: "山形県",   score: 5,   url: "https://uub.jp/k.cgi/6/iqpzIeo/" },
+        { name: "福島県",   score: 13,  url: "https://uub.jp/k.cgi/7/lpzfnipuziqdrezenfzfzip/" },
+        { name: "茨城県",   score: 24,  url: "https://uub.jp/k.cgi/8/iySirciuciqaYixnceezl/" },
+        { name: "栃木県",   score: 19,  url: "https://uub.jp/k.cgi/9/nfdrfzSfzfIfzfniuv/" },
+        { name: "群馬県",   score: 14,  url: "https://uub.jp/k.cgi/10/yniqniusivcirziw/" },
+        { name: "埼玉県",   score: 38,  url: "https://uub.jp/k.cgi/11/iponirzfnfdrYedqedqfzeENdqYippcr/" },
+        { name: "千葉県",   score: 23,  url: "https://uub.jp/k.cgi/12/ilrViqcezfzfzeniqtezetXo/" },
+        { name: "東京都",   score: 113, url: "https://uub.jp/k.cgi/13/iysezSfzfdrIdusztnStszbpotbuabro/" },
+        { name: "神奈川県", score: 34,  url: "https://uub.jp/k.cgi/14/zfztfLiqcdrbqIenivdqfw/" },
+        { name: "新潟県",   score: 19,  url: "https://uub.jp/k.cgi/15/oIfIfzIiwciqecipr/" },
+        { name: "富山県",   score: 12,  url: "https://uub.jp/k.cgi/16/zfzfnfnIniqq/" },
+        { name: "石川県",   score: 30,  url: "https://uub.jp/k.cgi/17/zEdrfzItdqfatzIo/" },
+        { name: "福井県",   score: 7,   url: "https://uub.jp/k.cgi/18/uzedriqnip/" },
+        { name: "山梨県",   score: 25,  url: "https://uub.jp/k.cgi/19/dqSfLdqIirInixv/" },
+        { name: "長野県",   score: 69,  url: "https://uub.jp/k.cgi/20/tSfziqVezipuzfzfdrciqVivIdqszIzIzXfSacixnq/" },
+        { name: "岐阜県",   score: 5,   url: "https://uub.jp/k.cgi/21/ipuzivzfipqzenv/" },
+        { name: "静岡県",   score: 17,  url: "https://uub.jp/k.cgi/22/iuzfzezezfdveduirzfzu/" },
+        { name: "愛知県",   score: 13,  url: "https://uub.jp/k.cgi/23/ipwziwzfzezirdqfzeziqzfniqzq/" },
+        { name: "滋賀県",   score: 13,  url: "https://uub.jp/k.cgi/25/qenezfdwfdl/" },
+        { name: "京都府",   score: 9,   url: "https://uub.jp/k.cgi/26/SiwIipoziuv/" },
+        { name: "大阪府",   score: 25,  url: "https://uub.jp/k.cgi/27/rtfzezirtafnipotfzedqiqnIip/" },
+        { name: "兵庫県",   score: 17,  url: "https://uub.jp/k.cgi/28/iqziplziqnfdqfdrIirziqzv/" },
+        { name: "鳥取県",   score: 2,   url: "https://uub.jp/k.cgi/31/putiqip/" },
+        { name: "島根県",   score: 7,   url: "https://uub.jp/k.cgi/32/ipvEIo//" },
+        { name: "岡山県",   score: 8,   url: "https://uub.jp/k.cgi/33/fzeztiplziqnezy/" },
+        { name: "広島県",   score: 17,  url: "https://uub.jp/k.cgi/34/niqdrfIivdqeIv/" },
+        { name: "山口県",   score: 14,  url: "https://uub.jp/k.cgi/35/rcnfnIirzfniv/" },
+        { name: "香川県",   score: 3,   url: "https://uub.jp/k.cgi/37/ipvco/" },
+        { name: "愛媛県",   score: 4,   url: "https://uub.jp/k.cgi/38/yIipl/" },
+        { name: "福岡県",   score: 19,  url: "https://uub.jp/k.cgi/40/lodqiqzirzfzirnfzixziunFip/" },
+        { name: "佐賀県",   score: 1,   url: "https://uub.jp/k.cgi/41/ipwzeo/" },
+        { name: "熊本県",   score: 11,  url: "https://uub.jp/k.cgi/43/ipodqipunirzfzeneno/" },
+        { name: "大分県",   score: 11,  url: "https://uub.jp/k.cgi/44/ftiqciwIzezl/" },
+        { name: "鹿児島県", score: 14,  url: "https://uub.jp/k.cgi/46/iqziqIilrziuzEVy/" },
+      ]
+    }
+  }
+})
+KeikenchiDetail.component('keikenchi-pref', {
+  props: ['pref'],
+  template: '<th>{{ pref.name }}</th>'
+})
+KeikenchiDetail.component('keikenchi-score', {
+  props: ['pref'],
+  template: '<td><a :href="pref.url">{{ pref.score }}点</a></td>'
+})
+KeikenchiDetail.mount('#keikenchi-detail')
+
 const BriefingPapers = Vue.createApp({
   data() {
     return {
