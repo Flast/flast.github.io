@@ -37,8 +37,9 @@ const KeikenchiDetail = Vue.createApp({
         { name: "香川県",   score: 3,   url: "https://uub.jp/k.cgi/37/ipvco/" },
         { name: "愛媛県",   score: 4,   url: "https://uub.jp/k.cgi/38/yIipl/" },
         { name: "福岡県",   score: 19,  url: "https://uub.jp/k.cgi/40/lodqiqzirzfzirnfzixziunFip/" },
-        { name: "佐賀県",   score: 1,   url: "https://uub.jp/k.cgi/41/ipwzeo/" },
-        { name: "熊本県",   score: 11,  url: "https://uub.jp/k.cgi/43/ipodqipunirzfzeneno/" },
+        { name: "佐賀県",   score: 7,   url: "https://uub.jp/k.cgi/41/ppIetezeip/" },
+        { name: "長崎県",   score: 21,  url: "https://uub.jp/k.cgi/42/qkzezIivtsYip/" },
+        { name: "熊本県",   score: 17,  url: "https://uub.jp/k.cgi/43/qetixziqnirzfzenezIipodr/" },
         { name: "大分県",   score: 11,  url: "https://uub.jp/k.cgi/44/ftiqciwIzezl/" },
         { name: "鹿児島県", score: 14,  url: "https://uub.jp/k.cgi/46/iqziqIilrziuzEVy/" },
       ]
